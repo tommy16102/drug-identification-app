@@ -36,6 +36,7 @@ const Login = ({navigation}) => {
           size="27"
           m="14"
           color={colors.lightGray}
+          press={() => navigation.push('Find')}
         />
         <Button
           text="회원 가입"
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
   loginButtonContainer: {
     flex: 0.6,
     flexDirection: 'row',
+    marginTop: 5,
   },
   input: {
     backgroundColor: colors.white,
