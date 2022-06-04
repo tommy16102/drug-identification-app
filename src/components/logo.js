@@ -3,13 +3,10 @@ import {View, Image, StyleSheet} from 'react-native';
 import {colors} from '../colors';
 import {logos} from '../images';
 
-const Logo = ({cw, w, h, m}) => {
+const Logo = ({w, m}) => {
   return (
-    <View style={[styles.logoContainer, {width: cw}]}>
-      <Image
-        source={logos.logoDia}
-        style={[styles.logo, {width: w, height: h}]}
-      />
+    <View style={[styles.logoContainer, {width: +w, height: +w, margin: +m}]}>
+      <Image source={logos.logoDia} style={[styles.logo, {}]} />
     </View>
   );
 };
@@ -17,11 +14,8 @@ const Logo = ({cw, w, h, m}) => {
 const styles = StyleSheet.create({
   logoContainer: {
     backgroundColor: colors.lightGray,
-    width: '52%',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '15%',
     borderRadius: 15,
     borderColor: colors.gray,
     borderWidth: 2,

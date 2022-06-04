@@ -1,21 +1,21 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import {colors} from '../colors';
-import {logos, icons} from '../images';
+import {icons} from '../images';
 import Button from '../components/button';
 import Logo from '../components/logo';
 
 const Main = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Logo cw="52%" w="90%" h="90%" />
+      <Logo w="190" m="50" />
       <View style={styles.buttonContainer}>
         <View style={styles.buttons}>
           <View style={styles.button}>
             <Button
               text="모양 찾기"
-              h="60%"
-              w="60%"
+              h="60"
+              w="200"
               size="26"
               m="13"
               color={colors.lightGray}
@@ -26,8 +26,8 @@ const Main = ({navigation}) => {
             <Image source={icons.camera} style={styles.icon} />
             <Button
               text="이미지 찾기"
-              h="60%"
-              w="60%"
+              h="60"
+              w="200"
               size="26"
               m="13"
               color={colors.lightGray}
@@ -36,8 +36,8 @@ const Main = ({navigation}) => {
           <View style={styles.button}>
             <Button
               text="약국 찾기"
-              h="60%"
-              w="60%"
+              h="60"
+              w="200"
               size="26"
               m="13"
               color={colors.lightGray}
@@ -48,8 +48,8 @@ const Main = ({navigation}) => {
             <Image source={icons.login} style={styles.icon} />
             <Button
               text="로그인"
-              h="60%"
-              w="60%"
+              h="60"
+              w="200"
               size="26"
               m="13"
               color={colors.lightGray}
@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: colors.lightGray,
-    width: '90%',
+    width: 380,
     flex: 2.3,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '10%',
-    marginTop: '20%',
+    marginBottom: 50,
+    marginTop: 30,
     borderRadius: 15,
     borderColor: colors.darkGray,
     borderWidth: 2,
@@ -85,14 +85,14 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flex: 1,
-    width: '96%',
+    width: 360,
     flexDirection: 'column',
     alignItems: 'center',
   },
   button: {
     flex: 1,
     flexDirection: 'row',
-    width: '98%',
+    width: 350,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   icon: {
-    width: '20%',
-    height: '60%',
+    width: 60,
+    height: 60,
     borderRadius: 5,
     resizeMode: 'contain',
     margin: 10,
