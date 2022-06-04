@@ -9,7 +9,12 @@ const Button = ({w, h, text, size, press, m, color}) => {
       onPress={press}
       style={[
         styles.button,
-        {backgroundColor: color, width: w, height: h, margin: +m},
+        {
+          backgroundColor: color,
+          width: +w,
+          height: +h,
+          margin: +m,
+        },
       ]}>
       <Text style={[styles.text, {fontSize: +size}]}>{text}</Text>
     </TouchableOpacity>
