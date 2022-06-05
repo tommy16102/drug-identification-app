@@ -19,6 +19,7 @@ const Main = ({navigation}) => {
               size="26"
               m="13"
               color={colors.lightGray}
+              press={() => navigation.push('Search', {find: true})}
             />
             <Image source={icons.shape} style={styles.icon} />
           </View>
@@ -31,6 +32,7 @@ const Main = ({navigation}) => {
               size="26"
               m="13"
               color={colors.lightGray}
+              press={() => navigation.push('Search', {find: false})}
             />
           </View>
           <View style={styles.button}>

@@ -11,6 +11,7 @@ import Camera from '../asset/icons/camera.png';
 import Login from '../asset/icons/login.png';
 import Map from '../asset/icons/map.png';
 import Shape from '../asset/icons/shape.png';
+import Pill from '../asset/icons/pill.png';
 
 export const logos = {
   logoGray: LogoGray,
@@ -29,4 +30,5 @@ export const icons = {
   login: Login,
   map: Map,
   shape: Shape,
+  pill: Pill,
 };
