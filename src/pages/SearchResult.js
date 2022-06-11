@@ -13,7 +13,7 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
 
-const SearchResult = ({navigator, route}) => {
+const SearchResult = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <Logo w="100" m="30" />
@@ -26,26 +26,34 @@ const SearchResult = ({navigator, route}) => {
         </View>
         <View style={styles.bottomContainer}>
           <ScrollView style={styles.scrollView}>
-            <View style={styles.result}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={styles.result}
+              onPress={() =>
+                navigation.push('Detail', {
+                  image: icons.pill,
+                  name: '가드렛정',
+                })
+              }>
               <Image source={icons.pill} style={styles.icon} />
               <Text style={styles.resultfont}>가드렛정</Text>
-            </View>
-            <View style={styles.result}>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
               <Image source={icons.pill2} style={styles.icon} />
               <Text style={styles.resultfont}>가바토파정</Text>
-            </View>
-            <View style={styles.result}>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
               <Image source={icons.pill3} style={styles.icon} />
               <Text style={styles.resultfont}>가티스정</Text>
-            </View>
-            <View style={styles.result}>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
               <Image source={icons.pill4} style={styles.icon} />
               <Text style={styles.resultfont}>글로비트정</Text>
-            </View>
-            <View style={styles.result}>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
               <Image source={icons.pill5} style={styles.icon} />
               <Text style={styles.resultfont}>기네프정</Text>
-            </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
@@ -90,7 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    height: 680,
+    height: 670,
     width: 370,
     backgroundColor: colors.lightgray,
     alignItems: 'center',
