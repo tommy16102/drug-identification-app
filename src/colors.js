@@ -8,4 +8,10 @@ export const colors = {
   lighterGray: '#F3F3F3',
   darkerGray: '#454545',
   lightgray: '#e6e3e3',
+  lightRed: '#F28A8A',
+  lighterRed: '#FFC7C7',
+  darkRed: '#D13E3E',
+  grayRed: '#C3A3A3',
+  whiteRed: '#F3DBDB',
+  lightred: '#F7D6D6',
 };

@@ -12,6 +12,10 @@ import Login from '../asset/icons/login.png';
 import Map from '../asset/icons/map.png';
 import Shape from '../asset/icons/shape.png';
 import Pill from '../asset/icons/pill.png';
+import Pill2 from '../asset/icons/pill2.png';
+import Pill3 from '../asset/icons/pill3.png';
+import Pill4 from '../asset/icons/pill4.png';
+import Pill5 from '../asset/icons/pill5.png';
 
 export const logos = {
   logoGray: LogoGray,
@@ -31,4 +35,8 @@ export const icons = {
   map: Map,
   shape: Shape,
   pill: Pill,
+  pill2: Pill2,
+  pill3: Pill3,
+  pill4: Pill4,
+  pill5: Pill5,
 };

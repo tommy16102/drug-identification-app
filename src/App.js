@@ -6,7 +6,8 @@ import Login from './pages/Login';
 import Sign from './pages/Sign';
 import Find from './pages/Find';
 import Search from './pages/Search';
-
+import SearchResult from './pages/SearchResult';
+import Detail from './pages/Detail';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -36,6 +37,16 @@ const App = () => {
         <Stack.Screen
           name="Search"
           component={Search}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SearchResult"
+          component={SearchResult}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={Detail}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

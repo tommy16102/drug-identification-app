@@ -12,7 +12,7 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
 
-const Search = ({navigator, route}) => {
+const Search = ({navigation, route}) => {
   const [search, setSearch] = useState(route.params.find);
   //const [name, setName] = useState('');
   //const [ingre, setIngre] = useState('');
@@ -30,7 +30,7 @@ const Search = ({navigator, route}) => {
               style={[
                 styles.btnText,
                 // eslint-disable-next-line react-native/no-inline-styles
-                {color: search ? colors.darkGray : colors.lightgray},
+                {color: search ? colors.black : colors.lightgray},
               ]}>
               텍스트
             </Text>
@@ -40,12 +40,13 @@ const Search = ({navigator, route}) => {
               style={[
                 styles.btnText,
                 // eslint-disable-next-line react-native/no-inline-styles
-                {color: !search ? colors.darkGray : colors.lightgray},
+                {color: !search ? colors.black : colors.lightgray},
               ]}>
               이미지
             </Text>
           </TouchableOpacity>
         </View>
+        {/* component*/}
         <View style={styles.bottomContainer}>
           {search && (
             <>
@@ -77,6 +78,7 @@ const Search = ({navigator, route}) => {
                   size="25"
                   m="14"
                   color={colors.lightgray}
+                  press={() => navigation.push('SearchResult', {text: search})}
                 />
               </View>
             </>
@@ -99,7 +101,7 @@ const Search = ({navigator, route}) => {
                   size="24"
                   m="14"
                   color={colors.lightgray}
-                  press={clickSearch}
+                  press={() => navigation.push('SearchResult', {text: search})}
                 />
                 <Button
                   text={image ? '다시 불러오기' : '휴대폰에서 불러오기'}
@@ -173,8 +175,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   font: {
-    fontSize: 26,
-    color: colors.darkGray,
+    fontSize: 28,
+    color: colors.black,
     fontWeight: 'bold',
     marginTop: 30,
   },
