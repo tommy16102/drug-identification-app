@@ -36,7 +36,7 @@ const Login = ({navigation}) => {
           size="27"
           m="14"
           color={colors.lightGray}
-          press={() => navigation.push('Find')}
+          press={() => navigation.push('FindInfo')}
         />
         <Button
           text="회원 가입"

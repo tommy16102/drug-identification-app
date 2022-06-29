@@ -12,7 +12,7 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
 
-const Search = ({navigation, route}) => {
+const SearchDrug = ({navigation, route}) => {
   const [search, setSearch] = useState(route.params.find);
   //const [name, setName] = useState('');
   //const [ingre, setIngre] = useState('');
@@ -222,4 +222,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Search;
+export default SearchDrug;
