@@ -10,7 +10,7 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 
-const Find = ({navigator}) => {
+const FindInfo = ({navigator}) => {
   const [find, setFind] = useState(true);
   const clickId = () => setFind(true);
   const clickPw = () => setFind(false);
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Find;
+export default FindInfo;

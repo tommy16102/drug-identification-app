@@ -13,7 +13,7 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
 
-const Detail = ({navigation, route}) => {
+const DrugDetail = ({navigation, route}) => {
   const [showInfo, setShowInfo] = useState(true);
   console.log(route);
   return (
@@ -24,13 +24,7 @@ const Detail = ({navigation, route}) => {
           <Text style={styles.font}>{route.params.name}</Text>
           <Image source={route.params.image} style={styles.icon} />
         </View>
-        <View
-          style={[
-            styles.bottomContainer,
-            {
-              borderColor: showInfo ? colors.gray : colors.darkRed,
-            },
-          ]}>
+        <View style={[styles.bottomContainer]}>
           <View style={styles.buttons}>
             <Button
               text="상세정보"
@@ -247,4 +241,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Detail;
+export default DrugDetail;

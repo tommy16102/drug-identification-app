@@ -13,13 +13,13 @@ const Main = ({navigation}) => {
         <View style={styles.buttons}>
           <View style={styles.button}>
             <Button
-              text="모양 찾기"
+              text="텍스트 찾기"
               h="60"
               w="200"
               size="26"
               m="13"
               color={colors.lightGray}
-              press={() => navigation.push('Search', {find: true})}
+              press={() => navigation.push('SearchDrug', {find: true})}
             />
             <Image source={icons.shape} style={styles.icon} />
           </View>
@@ -32,7 +32,7 @@ const Main = ({navigation}) => {
               size="26"
               m="13"
               color={colors.lightGray}
-              press={() => navigation.push('Search', {find: false})}
+              press={() => navigation.push('SearchDrug', {find: false})}
             />
           </View>
           <View style={styles.button}>
@@ -43,6 +43,7 @@ const Main = ({navigation}) => {
               size="26"
               m="13"
               color={colors.lightGray}
+              press={() => navigation.push('SearchStore')}
             />
             <Image source={icons.map} style={styles.icon} />
           </View>

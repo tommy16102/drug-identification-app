@@ -30,7 +30,7 @@ const SearchResult = ({navigation, route}) => {
               activeOpacity={0.6}
               style={styles.result}
               onPress={() =>
-                navigation.push('Detail', {
+                navigation.push('DrugDetail', {
                   image: icons.pill,
                   name: '가드렛정',
                 })

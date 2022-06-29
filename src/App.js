@@ -4,10 +4,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Main from './pages/Main';
 import Login from './pages/Login';
 import Sign from './pages/Sign';
-import Find from './pages/Find';
-import Search from './pages/Search';
+import FindInfo from './pages/FindInfo';
+import SearchDrug from './pages/SearchDrug';
 import SearchResult from './pages/SearchResult';
-import Detail from './pages/Detail';
+import DrugDetail from './pages/DrugDetail';
+import SearchStore from './pages/SearchStore';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -30,13 +31,13 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Find"
-          component={Find}
+          name="FindInfo"
+          component={FindInfo}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Search"
-          component={Search}
+          name="SearchDrug"
+          component={SearchDrug}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -45,8 +46,13 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Detail"
-          component={Detail}
+          name="DrugDetail"
+          component={DrugDetail}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SearchStore"
+          component={SearchStore}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
