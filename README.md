@@ -10,4 +10,7 @@ npm install @react-navigation/native-stack
 
 < 6.29 >
 npm install react-native-geolocation-service
+
+<7.3>
+npm install axios
 ```
