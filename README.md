@@ -13,4 +13,8 @@ npm install react-native-geolocation-service
 
 <7.3>
 npm install axios
+
+<7.4>
+npm install react-native-webview
+npm install @actbase/react-daum-postcode
 ```
