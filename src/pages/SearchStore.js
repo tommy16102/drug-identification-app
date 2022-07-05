@@ -10,6 +10,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 
+import {WebView} from 'react-native-webview';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
@@ -24,7 +25,9 @@ const SearchStore = ({navigation, route}) => {
   const [address, setAddress] = useState('');
 
   useEffect(() => {
-    mapPos ? getCurrentPosition() : (() => setAddress('현재 거주지'))();
+    mapPos
+      ? getCurrentPosition()
+      : (() => setAddress('서울 중구 필동로3길 5'))();
   }, [getCurrentPosition, mapPos]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,25 +84,35 @@ const SearchStore = ({navigation, route}) => {
         <View style={styles.header}>
           <Text style={styles.btnText}>{address}</Text>
         </View>
-        <View style={styles.bottomContainer}>{/*지도*/}</View>
+        <View style={styles.bottomContainer}>
+          {!!address && (
+            <WebView
+              //source={{uri: 'https://m.map.naver.com/search2/search.naver?query=%EC%95%BD%EA%B5%AD&sm=hty&style=v5#/map'}}
+              source={{
+                uri: `https://m.map.kakao.com/actions/searchView?q=${address} 약국&wyEnc=QOVNOLS&lvl=5#!/all/map/place`,
+              }}
+              style={{width: 350, borderRadius: 15}}
+            />
+          )}
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <Button
           text="현재 위치에서 검색"
-          h="53"
+          h="50"
           w="290"
           size="24"
-          m="8"
-          color={colors.white}
+          m="5"
+          color={!mapPos ? colors.white : '#CECCCC'}
           press={getCurrentPosition}
         />
         <Button
           text="거주지에서 검색"
-          h="53"
+          h="50"
           w="290"
           size="24"
-          m="8"
-          color={colors.white}
+          m="5"
+          color={mapPos ? colors.white : '#CECCCC'}
           press={() => setMapPos(false)}
         />
       </View>
@@ -115,32 +128,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
   },
   header: {
-    margin: 10,
+    margin: 6,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   btnText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginLeft: 15,
-    marginRight: 15,
     color: colors.black,
   },
   mapContainer: {
-    flex: 3.4,
+    flex: 3.5,
     width: 370,
     backgroundColor: colors.lightGray,
     alignItems: 'center',
     borderRadius: 15,
     borderColor: colors.darkGray,
     borderWidth: 2,
-    margin: 28,
+    margin: 25,
     marginTop: 0,
   },
   bottomContainer: {
-    width: 340,
-    flex: 1,
+    width: 350,
+    height: 460,
     backgroundColor: colors.lighterGray,
     alignItems: 'center',
     borderRadius: 15,
@@ -148,17 +160,19 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     margin: 20,
     marginTop: 10,
+    overflow: 'hidden',
   },
   buttonContainer: {
     flex: 0.9,
-    width: 325,
+    width: 315,
     backgroundColor: colors.lightgray,
     alignItems: 'center',
     borderRadius: 15,
     borderColor: colors.darkGray,
-    borderWidth: 2,
+    borderWidth: 3,
     justifyContent: 'center',
-    marginBottom: 20,
+    margin: 10,
+    bottom: 10,
   },
 });
 
