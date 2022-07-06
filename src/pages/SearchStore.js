@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  Alert,
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -57,6 +58,17 @@ const SearchStore = ({navigation, route}) => {
     }
   };
 
+  //webView JS script
+  const innerScript = `let dom = document.getElementById('startQuery');
+    let a = document.getElementsByClassName('btn_sch');
+    if(a.length == 2) {
+      setTimeout(() => {
+        a[0].click();
+        alert("출발지를 입력하세요");
+      }, 100);
+    }
+  `;
+
   //현재 위도, 경도 -> 주소
   const getAddress = async (latitude, longitude) => {
     try {
@@ -77,6 +89,7 @@ const SearchStore = ({navigation, route}) => {
       console.log(error.message);
     }
   };
+
   return (
     <View style={styles.container}>
       <Logo w="100" m="30" />
@@ -87,10 +100,10 @@ const SearchStore = ({navigation, route}) => {
         <View style={styles.bottomContainer}>
           {!!address && (
             <WebView
-              //source={{uri: 'https://m.map.naver.com/search2/search.naver?query=%EC%95%BD%EA%B5%AD&sm=hty&style=v5#/map'}}
               source={{
                 uri: `https://m.map.kakao.com/actions/searchView?q=${address} 약국&wyEnc=QOVNOLS&lvl=5#!/all/map/place`,
               }}
+              injectedJavaScript={!mapPos ? innerScript : ''}
               style={{width: 350, borderRadius: 15}}
             />
           )}

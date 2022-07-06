@@ -9,6 +9,7 @@ import {
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
+import TouchableText from '../components/touchableText';
 
 const FindInfo = ({navigator}) => {
   const [find, setFind] = useState(true);
@@ -20,26 +21,8 @@ const FindInfo = ({navigator}) => {
       <Logo w="150" m="40" />
       <View style={styles.innerContainer}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={clickId}>
-            <Text
-              style={[
-                styles.btnText,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {color: find ? colors.darkGray : colors.lightgray},
-              ]}>
-              아이디
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={clickPw}>
-            <Text
-              style={[
-                styles.btnText,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {color: !find ? colors.darkGray : colors.lightgray},
-              ]}>
-              비밀번호
-            </Text>
-          </TouchableOpacity>
+          <TouchableText text="아이디" press={clickId} search={find} />
+          <TouchableText text="비밀번호" press={clickPw} search={!find} />
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.inputContainer}>
