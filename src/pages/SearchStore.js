@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -20,7 +20,6 @@ import Geolocation from 'react-native-geolocation-service';
 import axios from 'axios';
 
 //거주지.
-
 const SearchStore = ({navigation, route}) => {
   const [mapPos, setMapPos] = useState(true); //default 현재위치
   const [address, setAddress] = useState('');
@@ -59,13 +58,26 @@ const SearchStore = ({navigation, route}) => {
   };
 
   //webView JS script
-  const innerScript = `let dom = document.getElementById('startQuery');
-    let a = document.getElementsByClassName('btn_sch');
-    if(a.length == 2) {
+  const innerScript = `
+    let startAddress;
+    document.addEventListener("message", (e) => {
+      startAddress = e.data;
+    });
+    let startInput = document.getElementById('startQuery');
+    let searchClear = document.getElementsByClassName('btn_sch');
+    let hiddenInput = document.getElementById('lsLoc');
+    if((document.location.href).includes('routeView') && !(document.location.href).includes('startLoc') && startInput.value != startAddress) {
       setTimeout(() => {
-        a[0].click();
-        alert("출발지를 입력하세요");
-      }, 100);
+        searchClear[0].click();
+        startInput.value = startAddress;
+        lsLoc.value = startAddress;
+        let currentURL = document.location.href; //출발지 X 도착지 o
+        let index = currentURL.indexOf('routeView?') + 10;
+        let part = currentURL.slice(index);
+        alert("출발지를 거주지로 선택하세요");
+        document.location.href = 'https://m.map.kakao.com/actions/routeSearchView?locationType=depart&q='+startAddress+'&'+part;
+      }, 200);
+      
     }
   `;
 
@@ -90,6 +102,16 @@ const SearchStore = ({navigation, route}) => {
     }
   };
 
+  let webRef = useRef < WebView > null;
+  const handleSetRef = _ref => {
+    webRef = _ref;
+  };
+
+  //address -> webview
+  const native_to_web = () => {
+    console.log(webRef.postMessage(address));
+  };
+
   return (
     <View style={styles.container}>
       <Logo w="100" m="30" />
@@ -100,9 +122,11 @@ const SearchStore = ({navigation, route}) => {
         <View style={styles.bottomContainer}>
           {!!address && (
             <WebView
+              ref={handleSetRef}
               source={{
                 uri: `https://m.map.kakao.com/actions/searchView?q=${address} 약국&wyEnc=QOVNOLS&lvl=5#!/all/map/place`,
               }}
+              onLoad={native_to_web}
               injectedJavaScript={!mapPos ? innerScript : ''}
               style={{width: 350, borderRadius: 15}}
             />
@@ -116,7 +140,7 @@ const SearchStore = ({navigation, route}) => {
           w="290"
           size="24"
           m="5"
-          color={!mapPos ? colors.white : '#CECCCC'}
+          color={!mapPos ? colors.white : colors.selectedGray}
           press={getCurrentPosition}
         />
         <Button
@@ -125,7 +149,7 @@ const SearchStore = ({navigation, route}) => {
           w="290"
           size="24"
           m="5"
-          color={mapPos ? colors.white : '#CECCCC'}
+          color={mapPos ? colors.white : colors.selectedGray}
           press={() => setMapPos(false)}
         />
       </View>
