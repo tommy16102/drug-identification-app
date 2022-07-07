@@ -10,6 +10,7 @@ import {
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
+import TouchableText from '../components/touchableText';
 import {icons} from '../images';
 
 const SearchDrug = ({navigation, route}) => {
@@ -25,26 +26,8 @@ const SearchDrug = ({navigation, route}) => {
       <Logo w="100" m="30" />
       <View style={styles.innerContainer}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={clickText}>
-            <Text
-              style={[
-                styles.btnText,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {color: search ? colors.black : colors.lightgray},
-              ]}>
-              텍스트
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={clickImage}>
-            <Text
-              style={[
-                styles.btnText,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {color: !search ? colors.black : colors.lightgray},
-              ]}>
-              이미지
-            </Text>
-          </TouchableOpacity>
+          <TouchableText text="텍스트" press={clickText} search={search} />
+          <TouchableText text="이미지" press={clickImage} search={!search} />
         </View>
         {/* component*/}
         <View style={styles.bottomContainer}>

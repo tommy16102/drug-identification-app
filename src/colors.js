@@ -14,4 +14,5 @@ export const colors = {
   grayRed: '#C3A3A3',
   whiteRed: '#F3DBDB',
   lightred: '#F7D6D6',
+  selectedGray: '#CECCCC',
 };
