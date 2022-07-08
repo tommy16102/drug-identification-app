@@ -4,6 +4,7 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
+import Address from '../components/address';
 
 const Sign = ({navigator}) => {
   const [isModal, setModal] = useState(false);
@@ -17,27 +18,7 @@ const Sign = ({navigator}) => {
           animationType="fade"
           transparent={true}
           onRequestClose={() => setModal(false)}>
-          <View style={styles.modalContainer}>
-            <Text style={[styles.title, {marginTop: 10}]}>
-              도로명 주소를 입력해주세요
-            </Text>
-            <Postcode
-              style={styles.modalView}
-              jsOptions={{animation: true, hideMapBtn: true}}
-              onSelected={data => {
-                setAddress(data.address);
-                setModal(false);
-              }}
-            />
-            <Button
-              text="닫기"
-              h="42"
-              w="92"
-              size="20"
-              m="0"
-              press={() => setModal(false)}
-            />
-          </View>
+          <Address setAddress={setAddress} setModal={setModal} />
         </Modal>
         <Text style={styles.title}>회원 가입</Text>
         <TextInput style={styles.input} placeholder="이름(한글)" />
