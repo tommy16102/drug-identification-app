@@ -20,7 +20,7 @@ const SearchResult = ({navigation, route}) => {
       <View style={styles.innerContainer}>
         <View style={styles.topContainer}>
           <Text style={styles.font}>
-            {route.params.text ? '텍스트' : '이미지'}
+            {route.params.search ? '텍스트' : '이미지'}
           </Text>
           <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
         </View>
