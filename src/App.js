@@ -59,7 +59,7 @@ const App = () => {
         />
         <Stack.Screen
           name="MyPage"
-          component={MyPage}
+          component={Login}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
