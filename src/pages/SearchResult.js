@@ -15,49 +15,51 @@ import {icons} from '../images';
 
 const SearchResult = ({navigation, route}) => {
   return (
-    <View style={styles.container}>
-      <Logo w="100" m="30" />
-      <View style={styles.innerContainer}>
-        <View style={styles.topContainer}>
-          <Text style={styles.font}>
-            {route.params.search ? '텍스트' : '이미지'}
-          </Text>
-          <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
-        </View>
-        <View style={styles.bottomContainer}>
-          <ScrollView style={styles.scrollView}>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              style={styles.result}
-              onPress={() =>
-                navigation.push('DrugDetail', {
-                  image: icons.pill,
-                  name: '가드렛정',
-                })
-              }>
-              <Image source={icons.pill} style={styles.icon} />
-              <Text style={styles.resultfont}>가드렛정</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
-              <Image source={icons.pill2} style={styles.icon} />
-              <Text style={styles.resultfont}>가바토파정</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
-              <Image source={icons.pill3} style={styles.icon} />
-              <Text style={styles.resultfont}>가티스정</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
-              <Image source={icons.pill4} style={styles.icon} />
-              <Text style={styles.resultfont}>글로비트정</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={styles.result}>
-              <Image source={icons.pill5} style={styles.icon} />
-              <Text style={styles.resultfont}>기네프정</Text>
-            </TouchableOpacity>
-          </ScrollView>
+    <ScrollView>
+      <View style={styles.container}>
+        <Logo w="100" m="30" />
+        <View style={styles.innerContainer}>
+          <View style={styles.topContainer}>
+            <Text style={styles.font}>
+              {route.params.search ? '텍스트' : '이미지'}
+            </Text>
+            <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
+          </View>
+          <View style={styles.bottomContainer}>
+            <ScrollView style={styles.scrollView}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                style={styles.result}
+                onPress={() =>
+                  navigation.push('DrugDetail', {
+                    image: icons.pill,
+                    name: '가드렛정',
+                  })
+                }>
+                <Image source={icons.pill} style={styles.icon} />
+                <Text style={styles.resultfont}>가드렛정</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} style={styles.result}>
+                <Image source={icons.pill2} style={styles.icon} />
+                <Text style={styles.resultfont}>가바토파정</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} style={styles.result}>
+                <Image source={icons.pill3} style={styles.icon} />
+                <Text style={styles.resultfont}>가티스정</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} style={styles.result}>
+                <Image source={icons.pill4} style={styles.icon} />
+                <Text style={styles.resultfont}>글로비트정</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} style={styles.result}>
+                <Image source={icons.pill5} style={styles.icon} />
+                <Text style={styles.resultfont}>기네프정</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

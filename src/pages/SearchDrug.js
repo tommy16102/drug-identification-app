@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -22,26 +23,28 @@ const SearchDrug = ({navigation, route}) => {
   const clickText = () => setSearch(true);
   const clickImage = () => setSearch(false);
   return (
-    <View style={styles.container}>
-      <Logo w="100" m="30" />
-      <View style={styles.innerContainer}>
-        <View style={styles.header}>
-          <TouchableText text="텍스트" press={clickText} search={search} />
-          <TouchableText text="이미지" press={clickImage} search={!search} />
-        </View>
-        <View style={styles.bottomContainer}>
-          {search ? (
-            <TextSearch navigation={navigation} route={route} search={search} />
-          ) : (
-            <ImageSearch
-              navigation={navigation}
-              route={route}
-              search={search}
-            />
-          )}
+    <ScrollView>
+      <View style={styles.container}>
+        <Logo w="100" m="30" />
+        <View style={styles.innerContainer}>
+          <View style={styles.header}>
+            <TouchableText text="텍스트" press={clickText} search={search} />
+            <TouchableText text="이미지" press={clickImage} search={!search} />
+          </View>
+          <View style={styles.bottomContainer}>
+            {search ? (
+              <TextSearch navigation={navigation} route={route} search={search} />
+            ) : (
+              <ImageSearch
+                navigation={navigation}
+                route={route}
+                search={search}
+              />
+            )}
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

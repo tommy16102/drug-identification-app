@@ -12,7 +12,6 @@ import SearchStore from './pages/SearchStore';
 import MyPage from './pages/MyPage';
 
 const Stack = createNativeStackNavigator();
-
 const App = () => {
   return (
     <NavigationContainer>
@@ -59,7 +58,7 @@ const App = () => {
         />
         <Stack.Screen
           name="MyPage"
-          component={Login}
+          component={MyPage}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

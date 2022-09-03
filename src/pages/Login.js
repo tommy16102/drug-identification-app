@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useState} from 'react';
-import {View, StyleSheet, TextInput, Text} from 'react-native';
+import {View, StyleSheet, TextInput, Text, ScrollView} from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
@@ -9,71 +9,73 @@ const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <View style={styles.container}>
-      <Logo w="180" m="50" />
-      <View style={styles.loginContainer}>
-        <TextInput
-          style={[styles.input, {marginTop: 0}]}
-          placeholder="아이디"
-          onChange={event => {
-            const {eventCount, target, text} = event.nativeEvent;
-            setUsername(text);
-          }}
-        />
-        <TextInput
-          style={[styles.input, {marginTop: 30, marginBottom: 35}]}
-          placeholder="비밀번호"
-          onChange={event => {
-            const {eventCount, target, text} = event.nativeEvent;
-            setPassword(text);
-          }}
-        />
-        <View style={styles.loginButtonContainer}>
+    <ScrollView>
+      <View style={styles.container}>
+        <Logo w="180" m="50" />
+        <View style={styles.loginContainer}>
+          <TextInput
+            style={[styles.input, {marginTop: 0}]}
+            placeholder="아이디"
+            onChange={event => {
+              const {eventCount, target, text} = event.nativeEvent;
+              setUsername(text);
+            }}
+          />
+          <TextInput
+            style={[styles.input, {marginTop: 30, marginBottom: 35}]}
+            placeholder="비밀번호"
+            onChange={event => {
+              const {eventCount, target, text} = event.nativeEvent;
+              setPassword(text);
+            }}
+          />
+          <View style={styles.loginButtonContainer}>
+            <Button
+              text="로그인"
+              h="75"
+              w="160"
+              size="30"
+              m="14"
+              color={colors.lighterGray}
+              press={() => {
+                const param = {username: username, password: password};
+                axios({
+                  method: 'post',
+                  url: 'http://10.0.2.2:8080/api/login',
+                  params: param,
+                })
+                  .then(function (response) {
+                    console.log(response.data);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
           <Button
-            text="로그인"
+            text="ID/PW 찾기"
             h="75"
-            w="160"
+            w="170"
+            size="27"
+            m="14"
+            color={colors.lightGray}
+            press={() => navigation.push('FindInfo')}
+          />
+          <Button
+            text="회원 가입"
+            h="75"
+            w="170"
             size="30"
             m="14"
-            color={colors.lighterGray}
-            press={() => {
-              const param = {username: username, password: password};
-              axios({
-                method: 'post',
-                url: 'http://10.0.2.2:8080/api/login',
-                params: param,
-              })
-                .then(function (response) {
-                  console.log(response.data);
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
-            }}
+            color={colors.lightGray}
+            press={() => navigation.push('Sign')}
           />
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          text="ID/PW 찾기"
-          h="75"
-          w="170"
-          size="27"
-          m="14"
-          color={colors.lightGray}
-          press={() => navigation.push('FindInfo')}
-        />
-        <Button
-          text="회원 가입"
-          h="75"
-          w="170"
-          size="30"
-          m="14"
-          color={colors.lightGray}
-          press={() => navigation.push('Sign')}
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
