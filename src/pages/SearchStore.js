@@ -9,6 +9,7 @@ import {
   Platform,
   PermissionsAndroid,
   Alert,
+  ScrollView,
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -113,47 +114,49 @@ const SearchStore = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Logo w="100" m="30" />
-      <View style={styles.mapContainer}>
-        <View style={styles.header}>
-          <Text style={styles.btnText}>{address}</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Logo w="100" m="30" />
+        <View style={styles.mapContainer}>
+          <View style={styles.header}>
+            <Text style={styles.btnText}>{address}</Text>
+          </View>
+          <View style={styles.bottomContainer}>
+            {!!address && (
+              <WebView
+                ref={handleSetRef}
+                source={{
+                  uri: `https://m.map.kakao.com/actions/searchView?q=${address} 약국&wyEnc=QOVNOLS&lvl=5#!/all/map/place`,
+                }}
+                onLoad={native_to_web}
+                injectedJavaScript={!mapPos ? innerScript : ''}
+                style={{width: 350, borderRadius: 15}}
+              />
+            )}
+          </View>
         </View>
-        <View style={styles.bottomContainer}>
-          {!!address && (
-            <WebView
-              ref={handleSetRef}
-              source={{
-                uri: `https://m.map.kakao.com/actions/searchView?q=${address} 약국&wyEnc=QOVNOLS&lvl=5#!/all/map/place`,
-              }}
-              onLoad={native_to_web}
-              injectedJavaScript={!mapPos ? innerScript : ''}
-              style={{width: 350, borderRadius: 15}}
-            />
-          )}
+        <View style={styles.buttonContainer}>
+          <Button
+            text="현재 위치에서 검색"
+            h="50"
+            w="290"
+            size="24"
+            m="5"
+            color={!mapPos ? colors.white : colors.selectedGray}
+            press={getCurrentPosition}
+          />
+          <Button
+            text="거주지에서 검색"
+            h="50"
+            w="290"
+            size="24"
+            m="5"
+            color={mapPos ? colors.white : colors.selectedGray}
+            press={() => setMapPos(false)}
+          />
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          text="현재 위치에서 검색"
-          h="50"
-          w="290"
-          size="24"
-          m="5"
-          color={!mapPos ? colors.white : colors.selectedGray}
-          press={getCurrentPosition}
-        />
-        <Button
-          text="거주지에서 검색"
-          h="50"
-          w="290"
-          size="24"
-          m="5"
-          color={mapPos ? colors.white : colors.selectedGray}
-          press={() => setMapPos(false)}
-        />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 

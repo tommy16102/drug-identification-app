@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -31,109 +32,112 @@ const MyPage = ({navigator}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Logo w="130" m="35" />
-      <View style={styles.signContainer}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <Modal
-            visible={isModal}
-            animationType="fade"
-            transparent={true}
-            statusBarTranslucent={true}
-            onRequestClose={() => setModal(false)}>
-            {modalMode ? (
-              <Address setAddress={setAddress} setModal={setModal} />
-            ) : (
-              <View style={[styles.modalContainer, {flex: 0.8, top: 70}]}>
-                <Text style={[styles.modalTitle, {marginTop: 30}]}>
-                  변경할 비밀번호를 입력해주세요.
-                </Text>
-                <View style={styles.bottomContainer}>
-                  <View style={[styles.infoContainer, {left: 10}]}>
-                    <Text style={styles.label}>현재 비밀번호</Text>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="현재 비밀번호"
-                    />
+    <ScrollView>
+      <View style={styles.container}>
+        <Logo w="130" m="35" />
+        <View style={styles.signContainer}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <Modal
+              visible={isModal}
+              animationType="fade"
+              transparent={true}
+              statusBarTranslucent={true}
+              onRequestClose={() => setModal(false)}>
+              {modalMode ? (
+                <Address setAddress={setAddress} setModal={setModal} />
+              ) : (
+                <View style={[styles.modalContainer, {flex: 0.8, top: 70}]}>
+                  <Text style={[styles.modalTitle, {marginTop: 30}]}>
+                    변경할 비밀번호를 입력해주세요.
+                  </Text>
+                  <View style={styles.bottomContainer}>
+                    <View style={[styles.infoContainer, {left: 10}]}>
+                      <Text style={styles.label}>현재 비밀번호</Text>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="현재 비밀번호"
+                      />
+                    </View>
+                    <View style={[styles.infoContainer, {left: 30}]}>
+                      <Text style={styles.label}>새 비밀번호</Text>
+                      <TextInput style={styles.input} placeholder="새 비밀번호" />
+                    </View>
+                    <View style={[styles.infoContainer, {left: 30}]}>
+                      <Text style={styles.label}>새 비밀번호</Text>
+                      <TextInput style={styles.input} placeholder="새 비밀번호" />
+                    </View>
                   </View>
-                  <View style={[styles.infoContainer, {left: 30}]}>
-                    <Text style={styles.label}>새 비밀번호</Text>
-                    <TextInput style={styles.input} placeholder="새 비밀번호" />
-                  </View>
-                  <View style={[styles.infoContainer, {left: 30}]}>
-                    <Text style={styles.label}>새 비밀번호</Text>
-                    <TextInput style={styles.input} placeholder="새 비밀번호" />
-                  </View>
+                  <Button
+                    text="변경"
+                    h="50"
+                    w="85"
+                    size="20"
+                    m="15"
+                    color={colors.lighterGray}
+                    press={() => setModal(false)}
+                  />
                 </View>
-                <Button
-                  text="변경"
-                  h="50"
-                  w="85"
-                  size="20"
-                  m="15"
-                  color={colors.lighterGray}
-                  press={() => setModal(false)}
-                />
-              </View>
-            )}
-          </Modal>
-        </KeyboardAvoidingView>
-        <Text style={styles.title}>회원 정보</Text>
-        <View style={styles.bottomContainer}>
-          <View style={[styles.infoContainer, {left: 40}]}>
-            <Text style={styles.label}>이름</Text>
-            <TextInput style={styles.input} value="이름" editable={false} />
-          </View>
-          <View style={[styles.infoContainer, {left: 20}]}>
-            <Text style={styles.label}>아이디</Text>
-            <TextInput style={styles.input} value="아이디" editable={false} />
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>비밀번호</Text>
-            <TextInput style={styles.input} value="비밀번호" editable={false} />
-            <Button
-              text="변경"
-              h="50"
-              w="50"
-              size="15"
-              m="0"
-              color={colors.lighterGray}
-              press={clickPwBtn}
-            />
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>생년월일</Text>
-            <TextInput style={styles.input} value="생년월일" editable={false} />
-          </View>
-          <View style={[styles.infoContainer, {left: 40}]}>
-            <Text style={styles.label}>주소</Text>
-            <TextInput style={styles.input} value="주소" editable={false} />
-            <Button
-              text="변경"
-              h="50"
-              w="50"
-              size="15"
-              m="0"
-              color={colors.lighterGray}
-              press={clickAdBtn}
-            />
+              )}
+            </Modal>
+          </KeyboardAvoidingView>
+          <Text style={styles.title}>회원 정보</Text>
+          <View style={styles.bottomContainer}>
+            <View style={[styles.infoContainer, {left: 40}]}>
+              <Text style={styles.label}>이름</Text>
+              <TextInput style={styles.input} value="이름" editable={false} />
+            </View>
+            <View style={[styles.infoContainer, {left: 20}]}>
+              <Text style={styles.label}>아이디</Text>
+              <TextInput style={styles.input} value="아이디" editable={false} />
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.label}>비밀번호</Text>
+              <TextInput style={styles.input} value="비밀번호" editable={false} />
+              <Button
+                text="변경"
+                h="50"
+                w="50"
+                size="15"
+                m="0"
+                color={colors.lighterGray}
+                press={clickPwBtn}
+              />
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.label}>생년월일</Text>
+              <TextInput style={styles.input} value="생년월일" editable={false} />
+            </View>
+            <View style={[styles.infoContainer, {left: 40}]}>
+              <Text style={styles.label}>주소</Text>
+              <TextInput style={styles.input} value="주소" editable={false} />
+              <Button
+                text="변경"
+                h="50"
+                w="50"
+                size="15"
+                m="0"
+                color={colors.lighterGray}
+                press={clickAdBtn}
+              />
+            </View>
           </View>
         </View>
+        <View style={styles.buttonContainer}>
+          {!isModal && (
+            <Button
+              text="약물 리스트"
+              h="55"
+              w="160"
+              size="22"
+              m="3"
+              color={colors.lightgray}
+              press={() => navigator.push('FindInfo')}
+              />
+          )}
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        {!isModal && (
-          <Button
-            text="약물 리스트"
-            h="55"
-            w="160"
-            size="22"
-            m="3"
-            color={colors.lightgray}
-          />
-        )}
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 

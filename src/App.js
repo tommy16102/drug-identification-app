@@ -12,7 +12,6 @@ import SearchStore from './pages/SearchStore';
 import MyPage from './pages/MyPage';
 
 const Stack = createNativeStackNavigator();
-
 const App = () => {
   return (
     <NavigationContainer>

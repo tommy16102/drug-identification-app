@@ -56,7 +56,7 @@ const Main = ({navigation}) => {
               size="26"
               m="13"
               color={colors.lightGray}
-              press={() => navigation.push('MyPage')}
+              press={() => navigation.push('Login')}
             />
           </View>
         </View>
