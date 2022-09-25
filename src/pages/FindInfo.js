@@ -11,6 +11,10 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import TouchableText from '../components/touchableText';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const FindInfo = ({navigator}) => {
   const [find, setFind] = useState(true);
@@ -64,7 +68,7 @@ const FindInfo = ({navigator}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: windowHeight,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.black,

@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     width: '90%',
-    height: 65,
+    height: 63,
     marginLeft: '5%',
     marginTop: 10,
   },

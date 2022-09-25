@@ -4,17 +4,21 @@ import {View, StyleSheet, TextInput, Text, ScrollView} from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <Logo w="180" m="50" />
         <View style={styles.loginContainer}>
           <TextInput
-            style={[styles.input, {marginTop: 0}]}
+            style={[styles.input, {marginTop: 10}]}
             placeholder="아이디"
             onChange={event => {
               const {eventCount, target, text} = event.nativeEvent;
@@ -41,7 +45,7 @@ const Login = ({navigation}) => {
                 const param = {username: username, password: password};
                 axios({
                   method: 'post',
-                  url: 'http://10.0.2.2:8080/api/login',
+                  url: 'http://192.168.0.12:8080/api/login',
                   params: param,
                 })
                   .then(function (response) {
@@ -80,25 +84,27 @@ const Login = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    margin: 0,
+    padding: 0,
+  },
   container: {
     backgroundColor: colors.black,
-    flex: 1,
+    height: windowHeight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   loginContainer: {
     backgroundColor: colors.lightGray,
     width: 380,
-    flex: 2.8,
+    height: 400,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 15,
     borderColor: colors.darkGray,
     borderWidth: 2,
-    paddingTop: 5,
-    paddingBottom: 1,
   },
   buttonContainer: {
     flex: 1,

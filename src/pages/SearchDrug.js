@@ -15,6 +15,10 @@ import TouchableText from '../components/touchableText';
 import {icons} from '../images';
 import TextSearch from '../components/textSearch';
 import ImageSearch from '../components/imageSearch';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const SearchDrug = ({navigation, route}) => {
   const [search, setSearch] = useState(route.params.find);
@@ -54,7 +58,7 @@ const SearchDrug = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: windowHeight,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.black,

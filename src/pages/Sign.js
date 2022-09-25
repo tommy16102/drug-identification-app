@@ -12,6 +12,10 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
 import Address from '../components/address';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const Sign = ({navigator}) => {
   const [isModal, setModal] = useState(false);
@@ -97,14 +101,13 @@ const Sign = ({navigator}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.black,
-    flex: 1,
+    height: windowHeight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   signContainer: {
     backgroundColor: colors.lightGray,
-    flex: 3.8,
-    flexDirection: 'column',
+    height: windowHeight - 330,
     justifyContent: 'center',
     alignItems: 'center',
     width: 380,

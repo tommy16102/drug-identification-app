@@ -12,6 +12,10 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const SearchResult = ({navigation, route}) => {
   return (
@@ -65,7 +69,7 @@ const SearchResult = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: windowHeight,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.black,
