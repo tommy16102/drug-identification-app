@@ -33,7 +33,11 @@ const SearchDrug = ({navigation, route}) => {
           </View>
           <View style={styles.bottomContainer}>
             {search ? (
-              <TextSearch navigation={navigation} route={route} search={search} />
+              <TextSearch
+                navigation={navigation}
+                route={route}
+                search={search}
+              />
             ) : (
               <ImageSearch
                 navigation={navigation}

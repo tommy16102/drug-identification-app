@@ -61,11 +61,17 @@ const MyPage = ({navigator}) => {
                     </View>
                     <View style={[styles.infoContainer, {left: 30}]}>
                       <Text style={styles.label}>새 비밀번호</Text>
-                      <TextInput style={styles.input} placeholder="새 비밀번호" />
+                      <TextInput
+                        style={styles.input}
+                        placeholder="새 비밀번호"
+                      />
                     </View>
                     <View style={[styles.infoContainer, {left: 30}]}>
                       <Text style={styles.label}>새 비밀번호</Text>
-                      <TextInput style={styles.input} placeholder="새 비밀번호" />
+                      <TextInput
+                        style={styles.input}
+                        placeholder="새 비밀번호"
+                      />
                     </View>
                   </View>
                   <Button
@@ -93,7 +99,11 @@ const MyPage = ({navigator}) => {
             </View>
             <View style={styles.infoContainer}>
               <Text style={styles.label}>비밀번호</Text>
-              <TextInput style={styles.input} value="비밀번호" editable={false} />
+              <TextInput
+                style={styles.input}
+                value="비밀번호"
+                editable={false}
+              />
               <Button
                 text="변경"
                 h="50"
@@ -106,7 +116,11 @@ const MyPage = ({navigator}) => {
             </View>
             <View style={styles.infoContainer}>
               <Text style={styles.label}>생년월일</Text>
-              <TextInput style={styles.input} value="생년월일" editable={false} />
+              <TextInput
+                style={styles.input}
+                value="생년월일"
+                editable={false}
+              />
             </View>
             <View style={[styles.infoContainer, {left: 40}]}>
               <Text style={styles.label}>주소</Text>
@@ -133,7 +147,7 @@ const MyPage = ({navigator}) => {
               m="3"
               color={colors.lightgray}
               press={() => navigator.push('FindInfo')}
-              />
+            />
           )}
         </View>
       </View>
