@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -15,9 +16,16 @@ import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
 
 const Address = ({setAddress, setModal}) => {
+  const [open, setOpen] = useState(false);
+  Keyboard.addListener('keyboardDidShow', e => {
+    setOpen(true);
+  });
+  Keyboard.addListener('keyboardDidHide', e => {
+    setOpen(false);
+  });
   return (
     <View style={styles.modalContainer}>
-      <Text style={[styles.title, {marginTop: 5}]}>
+      <Text style={[styles.title, {display: !open ? 'flex' : 'none'}]}>
         도로명 주소를 입력해주세요
       </Text>
       <Postcode
@@ -30,7 +38,7 @@ const Address = ({setAddress, setModal}) => {
       />
       <Button
         text="닫기"
-        h="42"
+        h="40"
         w="92"
         size="20"
         m=""
@@ -59,7 +67,7 @@ const styles = StyleSheet.create({
   modalView: {
     width: 360,
     height: 500,
-    margin: 20,
+    margin: 10,
   },
   title: {
     fontSize: 25,
