@@ -1,11 +1,15 @@
-import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Image, AsyncStorage} from 'react-native';
 import {colors} from '../colors';
 import {icons} from '../images';
 import Button from '../components/button';
 import Logo from '../components/logo';
 
 const Main = ({navigation}) => {
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    AsyncStorage.getItem('userid').then(res => setIsLogin(!!res));
+  }, []);
   return (
     <View style={styles.container}>
       <Logo w="190" m="50" />
@@ -50,13 +54,20 @@ const Main = ({navigation}) => {
           <View style={styles.button}>
             <Image source={icons.login} style={styles.icon} />
             <Button
-              text="로그인"
+              text={isLogin ? '마이페이지' : '로그인'}
               h="60"
               w="200"
               size="26"
               m="13"
               color={colors.lightGray}
-              press={() => navigation.push('Login')}
+              press={() => {
+                console.log(isLogin);
+                if (!isLogin) {
+                  navigation.push('Login');
+                } else {
+                  navigation.push('MyPage');
+                }
+              }}
             />
           </View>
         </View>

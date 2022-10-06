@@ -29,7 +29,6 @@ const Login = ({navigation}) => {
           const {password: pw} = response.data;
           if (pw === password) {
             await AsyncStorage.setItem('userid', username);
-            console.log(await AsyncStorage.getItem('userid'));
             makeAlert('로그인 성공', '메인 화면으로 이동합니다', () =>
               navigation.push('Main'),
             );
