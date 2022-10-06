@@ -4,14 +4,43 @@ import {View, StyleSheet, TextInput, Text, ScrollView} from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
-import {Dimensions} from 'react-native';
+import {Dimensions, Alert, AsyncStorage} from 'react-native';
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const makeAlert = (title, content, onPress = null) => {
+  Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
+};
 
 const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const onClickLoginButton = async e => {
+    if (!username) makeAlert('로그인 실패', '아이디를 입력해주세요');
+    else if (!password) makeAlert('로그인 실패', '비밀번호를 입력해주세요');
+    else {
+      const param = {username, password};
+      axios({
+        method: 'post',
+        url: 'http://192.168.0.12:8080/api/login',
+        params: param,
+      })
+        .then(async function (response) {
+          const {password: pw} = response.data;
+          if (pw === password) {
+            await AsyncStorage.setItem('userid', username);
+            console.log(await AsyncStorage.getItem('userid'));
+            makeAlert('로그인 성공', '메인 화면으로 이동합니다', () =>
+              navigation.push('Main'),
+            );
+          }
+          if (!password || pw !== password) throw new Error();
+        })
+        .catch(function (error) {
+          makeAlert('로그인 실패', '아이디와 비밀번호를 다시 입력해주세요');
+        });
+    }
+  };
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
@@ -21,15 +50,16 @@ const Login = ({navigation}) => {
             style={[styles.input, {marginTop: 10}]}
             placeholder="아이디"
             onChange={event => {
-              const {eventCount, target, text} = event.nativeEvent;
+              const {text} = event.nativeEvent;
               setUsername(text);
             }}
           />
           <TextInput
             style={[styles.input, {marginTop: 30, marginBottom: 35}]}
             placeholder="비밀번호"
+            secureTextEntry={true}
             onChange={event => {
-              const {eventCount, target, text} = event.nativeEvent;
+              const {text} = event.nativeEvent;
               setPassword(text);
             }}
           />
@@ -41,19 +71,8 @@ const Login = ({navigation}) => {
               size="30"
               m="14"
               color={colors.lighterGray}
-              press={() => {
-                const param = {username: username, password: password};
-                axios({
-                  method: 'post',
-                  url: 'http://192.168.0.12:8080/api/login',
-                  params: param,
-                })
-                  .then(function (response) {
-                    console.log(response.data);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
+              press={e => {
+                onClickLoginButton(e);
               }}
             />
           </View>
