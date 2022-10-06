@@ -120,12 +120,14 @@ const Sign = ({navigation}) => {
             style={styles.input}
             placeholder="비밀번호(영문, 숫자, 6자 이상)"
             value={password}
+            secureTextEntry={true}
             onChange={({nativeEvent: {text}}) => setPassword(text)}
           />
           <TextInput
             style={styles.input}
             placeholder="비밀번호 재확인"
             value={checkPassword}
+            secureTextEntry={true}
             onChange={({nativeEvent: {text}}) => setCheckPassword(text)}
           />
           <View style={styles.inputContainer}>
