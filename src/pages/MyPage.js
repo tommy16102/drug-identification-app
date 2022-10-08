@@ -9,6 +9,9 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  Dimensions,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -16,7 +19,13 @@ import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
 import Address from '../components/address';
 
-const MyPage = ({navigator}) => {
+const windowHeight = Dimensions.get('window').height;
+
+const makeAlert = (title, content, onPress = null) => {
+  Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
+};
+
+const MyPage = ({navigation}) => {
   const [isModal, setModal] = useState(false);
   const [address, setAddress] = useState('');
   const [modalMode, setModalMode] = useState(true);
@@ -29,6 +38,13 @@ const MyPage = ({navigator}) => {
   const clickAdBtn = () => {
     setModal(true);
     setModalMode(true);
+  };
+
+  const pressLogout = async () => {
+    await AsyncStorage.removeItem('userid');
+    makeAlert('로그아웃 성공', '메인 화면으로 이동합니다', () =>
+      navigation.push('Main'),
+    );
   };
 
   return (
@@ -139,15 +155,26 @@ const MyPage = ({navigator}) => {
         </View>
         <View style={styles.buttonContainer}>
           {!isModal && (
-            <Button
-              text="약물 리스트"
-              h="55"
-              w="160"
-              size="22"
-              m="3"
-              color={colors.lightgray}
-              press={() => navigator.push('FindInfo')}
-            />
+            <>
+              <Button
+                text="로그아웃"
+                h="55"
+                w="160"
+                size="22"
+                m="3"
+                color={colors.lightgray}
+                press={pressLogout}
+              />
+              <Button
+                text="약물 리스트"
+                h="55"
+                w="160"
+                size="22"
+                m="3"
+                color={colors.lightgray}
+                press={() => navigation.push('FindInfo')}
+              />
+            </>
           )}
         </View>
       </View>
@@ -161,6 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: windowHeight,
   },
   signContainer: {
     backgroundColor: colors.lightGray,
@@ -172,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: colors.darkGray,
     borderWidth: 2,
-    marginTop: 40,
+    marginTop: 20,
   },
   modalContainer: {
     flex: 0.95,
@@ -231,8 +259,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 0.6,
+    width: 380,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   label: {
     fontSize: 19,
