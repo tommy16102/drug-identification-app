@@ -26,14 +26,13 @@ const Login = ({navigation}) => {
         params: param,
       })
         .then(async function (response) {
-          const {password: pw} = response.data;
-          if (pw === password) {
+          if (response.data === '회원 정보가 비정확합니다.') throw new Error();
+          else {
             await AsyncStorage.setItem('userid', username);
             makeAlert('로그인 성공', '메인 화면으로 이동합니다', () =>
               navigation.push('Main'),
             );
           }
-          if (!password || pw !== password) throw new Error();
         })
         .catch(function (error) {
           makeAlert('로그인 실패', '아이디와 비밀번호를 다시 입력해주세요');
