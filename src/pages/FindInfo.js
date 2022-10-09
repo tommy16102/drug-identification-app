@@ -48,11 +48,6 @@ const FindInfo = ({navigator}) => {
     } else if (!personNumber || !personSecNumber) {
       makeAlert('아이디 찾기 실패', '주민등록를 입력해주세요');
     } else {
-      // const res = await axios.post('http://192.168.0.12:8080/api/findId', {
-      //   name,
-      //   personalNumber: personNumber + personSecNumber,
-      // });
-      // console.log(res.data);
       const param = {name, personalNumber: personNumber + personSecNumber};
       axios({
         method: 'post',
@@ -72,9 +67,45 @@ const FindInfo = ({navigator}) => {
       });
     }
   };
-
   const clickFindPwBtn = e => {
-    console.log('pw');
+    if (!name) {
+      makeAlert('비밀번호 찾기 실패', '이름 입력해주세요');
+    } else if (!id) {
+      makeAlert('비밀번호 찾기 실패', '아이디를 입력해주세요');
+    } else if (!personNumber || !personSecNumber) {
+      makeAlert('비밀번호 찾기 실패', '주민등록를 입력해주세요');
+    } else {
+      const param = {
+        name,
+        username: id,
+        personalNumber: personNumber + personSecNumber,
+      };
+      axios({
+        method: 'post',
+        url: 'http://192.168.0.12:8080/api/findPw',
+        params: param,
+      }).then(async function (response) {
+        if (response.data === '회원 정보가 비정확합니다.') {
+          makeAlert('회원 정보를 찾을 수 없습니다');
+        } else {
+          const [, found] = response.data.split(' : ');
+          const hideFound = hidePw(found);
+          makeAlert(
+            '비밀번호 찾기 성공',
+            `${name}님의 비밀번호는 ${hideFound} 입니다.`,
+          );
+        }
+      });
+    }
+  };
+  const hidePw = pw => {
+    return [...pw]
+      .map(elem => {
+        const rand = Math.floor(Math.random() * 10);
+        if (rand >= 5) return '*';
+        return elem;
+      })
+      .join('');
   };
   return (
     <ScrollView>
@@ -131,7 +162,7 @@ const FindInfo = ({navigator}) => {
               <Button
                 text={find ? '아이디 찾기' : '비밀번호 찾기'}
                 h="55"
-                w={find ? '140' : '150'}
+                w={find ? '140' : '160'}
                 size="20"
                 m="14"
                 color={colors.lightgray}
