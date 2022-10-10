@@ -58,7 +58,6 @@ const FindInfo = ({navigator}) => {
           makeAlert('회원 정보를 찾을 수 없습니다');
         } else {
           const [, found] = response.data.split(' : ');
-          console.log(found);
           makeAlert(
             '아이디 찾기 성공',
             `${name}님의 아이디는 ${found} 입니다.`,

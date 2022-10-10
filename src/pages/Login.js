@@ -26,15 +26,20 @@ const Login = ({navigation}) => {
         params: param,
       })
         .then(async function (response) {
+          console.log(response.data);
           if (response.data === '회원 정보가 비정확합니다.') throw new Error();
           else {
-            await AsyncStorage.setItem('userid', username);
+            await AsyncStorage.setItem(
+              'user',
+              JSON.stringify({username, password}),
+            );
             makeAlert('로그인 성공', '메인 화면으로 이동합니다', () =>
               navigation.push('Main'),
             );
           }
         })
         .catch(function (error) {
+          console.log(error);
           makeAlert('로그인 실패', '아이디와 비밀번호를 다시 입력해주세요');
         });
     }

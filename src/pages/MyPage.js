@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -18,6 +18,7 @@ import Button from '../components/button';
 import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
 import Address from '../components/address';
+import axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -27,9 +28,32 @@ const makeAlert = (title, content, onPress = null) => {
 
 const MyPage = ({navigation}) => {
   const [isModal, setModal] = useState(false);
-  const [address, setAddress] = useState('');
   const [modalMode, setModalMode] = useState(true);
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [personNum, setPersonNum] = useState('');
+  const [address, setAddress] = useState('');
 
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(async res => {
+      const {username, password} = JSON.parse(res);
+      const param = {username, password};
+      const result = await axios({
+        method: 'post',
+        url: 'http://192.168.0.12:8080/api/login',
+        params: param,
+      });
+      const {name, personalNumber, address} = result.data;
+      setName(name);
+      setUsername(username);
+      setPassword(password);
+      let pNumArr = [...personalNumber];
+      pNumArr.splice(pNumArr.length - 1, 0, '-');
+      setPersonNum(pNumArr.join(''));
+      setAddress(address);
+    });
+  }, []);
   const clickPwBtn = () => {
     setModal(true);
     setModalMode(false);
@@ -107,17 +131,21 @@ const MyPage = ({navigation}) => {
           <View style={styles.bottomContainer}>
             <View style={[styles.infoContainer, {left: 40}]}>
               <Text style={styles.label}>이름</Text>
-              <TextInput style={styles.input} value="이름" editable={false} />
+              <TextInput style={styles.input} value={name} editable={false} />
             </View>
             <View style={[styles.infoContainer, {left: 20}]}>
               <Text style={styles.label}>아이디</Text>
-              <TextInput style={styles.input} value="아이디" editable={false} />
+              <TextInput
+                style={styles.input}
+                value={username}
+                editable={false}
+              />
             </View>
             <View style={styles.infoContainer}>
               <Text style={styles.label}>비밀번호</Text>
               <TextInput
                 style={styles.input}
-                value="비밀번호"
+                value={password}
                 editable={false}
               />
               <Button
@@ -134,13 +162,18 @@ const MyPage = ({navigation}) => {
               <Text style={styles.label}>생년월일</Text>
               <TextInput
                 style={styles.input}
-                value="생년월일"
+                value={personNum}
                 editable={false}
               />
             </View>
             <View style={[styles.infoContainer, {left: 40}]}>
               <Text style={styles.label}>주소</Text>
-              <TextInput style={styles.input} value="주소" editable={false} />
+              <TextInput
+                style={[styles.input, {fontSize: 13}]}
+                value={address}
+                editable={false}
+                multiline={true}
+              />
               <Button
                 text="변경"
                 h="50"
@@ -256,6 +289,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     margin: 12,
+    color: colors.darkGray,
   },
   buttonContainer: {
     flex: 0.6,

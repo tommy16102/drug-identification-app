@@ -8,7 +8,10 @@ import Logo from '../components/logo';
 const Main = ({navigation}) => {
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    AsyncStorage.getItem('userid').then(res => setIsLogin(!!res));
+    AsyncStorage.getItem('user').then(res => {
+      console.log(res);
+      setIsLogin(!!res);
+    });
   }, []);
   return (
     <View style={styles.container}>
