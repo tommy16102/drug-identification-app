@@ -35,6 +35,9 @@ const MyPage = ({navigation}) => {
   const [personNum, setPersonNum] = useState('');
   const [address, setAddress] = useState('');
 
+  const [nowPw, setNowPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [checkPw, setCheckPw] = useState('');
   useEffect(() => {
     AsyncStorage.getItem('user').then(async res => {
       const {username, password} = JSON.parse(res);
@@ -65,10 +68,51 @@ const MyPage = ({navigation}) => {
   };
 
   const pressLogout = async () => {
-    await AsyncStorage.removeItem('userid');
+    await AsyncStorage.removeItem('user');
     makeAlert('로그아웃 성공', '메인 화면으로 이동합니다', () =>
       navigation.push('Main'),
     );
+  };
+
+  const checkNewPw = () => {
+    const regExp = /[a-zA-Z0-9]{6,}/g;
+    return regExp.test(newPw) && checkPw === newPw;
+  };
+
+  const changePw = async () => {
+    const param = {
+      oldPassword: nowPw,
+      newPassword: newPw,
+      username,
+    };
+    return await axios({
+      method: 'post',
+      url: 'http://192.168.0.12:8080/api/changePw',
+      params: param,
+    });
+  };
+
+  const onClickPwBtn = async () => {
+    if (!nowPw) makeAlert('비밀번호 변경 실패', '현재 비밀번호를 입력해주세요');
+    else if (!newPw || !checkPw)
+      makeAlert('비밀번호 변경 실패', '새 비밀번호를 입력해주세요');
+    else if (!checkNewPw())
+      makeAlert('비밀번호 변경 실패', '올바른 새 비밀번호를 입력해주세요');
+    else {
+      changePw()
+        .then(async function (response) {
+          if (response.data === '회원 비밀번호 변경 성공') {
+            await AsyncStorage.removeItem('user');
+            setModal(false);
+            makeAlert('비밀번호 변경 성공', '로그인 페이지로 이동합니다', () =>
+              navigation.push('Login'),
+            );
+          }
+        })
+        .catch(function (error) {
+          makeAlert('비밀번호 변경 실패', '비밀번호를 다시 입력해주세요');
+        });
+    }
   };
 
   return (
@@ -97,20 +141,26 @@ const MyPage = ({navigation}) => {
                       <TextInput
                         style={styles.input}
                         placeholder="현재 비밀번호"
+                        onChange={({nativeEvent: {text}}) => setNowPw(text)}
+                        secureTextEntry={true}
                       />
                     </View>
                     <View style={[styles.infoContainer, {left: 30}]}>
                       <Text style={styles.label}>새 비밀번호</Text>
                       <TextInput
                         style={styles.input}
-                        placeholder="새 비밀번호"
+                        placeholder="영문, 숫자, 6자 이상"
+                        onChange={({nativeEvent: {text}}) => setNewPw(text)}
+                        secureTextEntry={true}
                       />
                     </View>
                     <View style={[styles.infoContainer, {left: 30}]}>
                       <Text style={styles.label}>새 비밀번호</Text>
                       <TextInput
                         style={styles.input}
-                        placeholder="새 비밀번호"
+                        placeholder="영문, 숫자, 6자 이상"
+                        onChange={({nativeEvent: {text}}) => setCheckPw(text)}
+                        secureTextEntry={true}
                       />
                     </View>
                   </View>
@@ -121,7 +171,10 @@ const MyPage = ({navigation}) => {
                     size="20"
                     m="15"
                     color={colors.lighterGray}
-                    press={() => setModal(false)}
+                    press={() => {
+                      onClickPwBtn();
+                      //setModal(false);
+                    }}
                   />
                 </View>
               )}
