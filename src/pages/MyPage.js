@@ -56,10 +56,6 @@ const MyPage = ({navigation}) => {
       setAddress(address);
     });
   }, []);
-  useEffect(() => {
-    changeAddress(address);
-    makeAlert('', '주소 변경 성공');
-  }, [address, changeAddress]);
   const clickPwBtn = () => {
     setModal(true);
     setModalMode(false);
@@ -96,16 +92,20 @@ const MyPage = ({navigation}) => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const changeAddress = async () => {
+  const changeAddress = async ad => {
     const param = {
-      address,
+      address: ad,
       username,
     };
-    return await axios({
+    const res = await axios({
       method: 'post',
       url: 'http://192.168.0.12:8080/api/changeAddress',
       params: param,
     });
+    if (res.data === '회원 주소 변경') {
+      setAddress(ad);
+      makeAlert('', '주소 변경 성공');
+    } else makeAlert('', '주소 변경 실패');
   };
 
   const onClickPwBtn = async () => {
@@ -145,7 +145,10 @@ const MyPage = ({navigation}) => {
               statusBarTranslucent={true}
               onRequestClose={() => setModal(false)}>
               {modalMode ? (
-                <Address setAddress={setAddress} setModal={setModal} />
+                <Address
+                  setAddress={async ad => await changeAddress(ad)}
+                  setModal={setModal}
+                />
               ) : (
                 <View style={[styles.modalContainer, {flex: 0.8, top: 70}]}>
                   <Text style={[styles.modalTitle, {marginTop: 30}]}>
