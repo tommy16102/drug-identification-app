@@ -10,6 +10,7 @@ import {
   PermissionsAndroid,
   Alert,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
 
 import {WebView} from 'react-native-webview';
@@ -28,8 +29,25 @@ const SearchStore = ({navigation, route}) => {
   useEffect(() => {
     mapPos
       ? getCurrentPosition()
-      : (() => setAddress('서울 중구 필동로3길 5'))();
+      : (async () => {
+          const adr = await getSavedAddress();
+          setAddress(adr);
+        })();
   }, [getCurrentPosition, mapPos]);
+
+  const getSavedAddress = async () => {
+    return AsyncStorage.getItem('user').then(async res => {
+      const {username, password} = JSON.parse(res);
+      const param = {username, password};
+      const result = await axios({
+        method: 'post',
+        url: 'http://192.168.0.12:8080/api/login',
+        params: param,
+      });
+      const {address} = result.data;
+      return address;
+    });
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getCurrentPosition = async () => {
