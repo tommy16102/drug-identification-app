@@ -9,7 +9,6 @@ const Main = ({navigation}) => {
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     AsyncStorage.getItem('user').then(res => {
-      console.log(res);
       setIsLogin(!!res);
     });
   }, []);
@@ -64,7 +63,6 @@ const Main = ({navigation}) => {
               m="13"
               color={colors.lightGray}
               press={() => {
-                console.log(isLogin);
                 if (!isLogin) {
                   navigation.push('Login');
                 } else {

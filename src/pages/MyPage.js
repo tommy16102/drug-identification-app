@@ -34,7 +34,6 @@ const MyPage = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [personNum, setPersonNum] = useState('');
   const [address, setAddress] = useState('');
-
   const [nowPw, setNowPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [checkPw, setCheckPw] = useState('');
@@ -57,6 +56,10 @@ const MyPage = ({navigation}) => {
       setAddress(address);
     });
   }, []);
+  useEffect(() => {
+    changeAddress(address);
+    makeAlert('', '주소 변경 성공');
+  }, [address, changeAddress]);
   const clickPwBtn = () => {
     setModal(true);
     setModalMode(false);
@@ -88,6 +91,19 @@ const MyPage = ({navigation}) => {
     return await axios({
       method: 'post',
       url: 'http://192.168.0.12:8080/api/changePw',
+      params: param,
+    });
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const changeAddress = async () => {
+    const param = {
+      address,
+      username,
+    };
+    return await axios({
+      method: 'post',
+      url: 'http://192.168.0.12:8080/api/changeAddress',
       params: param,
     });
   };
@@ -173,7 +189,6 @@ const MyPage = ({navigation}) => {
                     color={colors.lighterGray}
                     press={() => {
                       onClickPwBtn();
-                      //setModal(false);
                     }}
                   />
                 </View>
