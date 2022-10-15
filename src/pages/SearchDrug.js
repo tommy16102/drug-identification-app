@@ -17,13 +17,10 @@ import TextSearch from '../components/textSearch';
 import ImageSearch from '../components/imageSearch';
 import {Dimensions} from 'react-native';
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const SearchDrug = ({navigation, route}) => {
   const [search, setSearch] = useState(route.params.find);
-  //const [name, setName] = useState('');
-  //const [ingre, setIngre] = useState('');
   const clickText = () => setSearch(true);
   const clickImage = () => setSearch(false);
   return (

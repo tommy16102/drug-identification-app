@@ -18,6 +18,11 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const SearchResult = ({navigation, route}) => {
+  useEffect(() => {
+    console.log('DF');
+    console.log(route.params);
+  }, [route.params]);
+
   return (
     <ScrollView>
       <View style={styles.container}>
