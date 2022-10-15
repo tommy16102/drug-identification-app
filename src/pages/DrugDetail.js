@@ -15,7 +15,7 @@ import {icons} from '../images';
 
 const DrugDetail = ({navigation, route}) => {
   const [showInfo, setShowInfo] = useState(true);
-  console.log(route);
+  console.log(route.params);
   return (
     <ScrollView>
       <View style={styles.container}>

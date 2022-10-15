@@ -34,5 +34,6 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "proxy": "https://apis.data.go.kr"
 }
