@@ -32,13 +32,11 @@ const Axios = axios.create({
 const SearchResult = ({navigation, route}) => {
   const [result, setResult] = useState([]);
   useEffect(() => {
-    const {
-      text: {elem, name},
-    } = route.params;
-    console.log(name);
+    const {kind, text} = route.params;
+    console.log(kind, text);
     axios({
       method: 'get',
-      url: `http://192.168.0.12:8080/api/drug/textSearch?drugName=${name}`,
+      url: `http://192.168.0.12:8080/api/drug/nameSearch?query=${text}`,
     })
       .then(function (response) {
         console.log(response.data.length);

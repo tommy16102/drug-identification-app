@@ -2,52 +2,57 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TextInput, Text, Alert} from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
+import {Picker} from '@react-native-picker/picker';
 
 const makeAlert = (title, content, onPress = null) => {
   Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
 };
 
+const kinds = ['제품 검색', '성분 검색', '통합 검색'];
+
 const TextSearch = ({navigation, search}) => {
-  const [name, setName] = useState('');
-  const [elem, setElem] = useState('');
+  const [text, setName] = useState('');
+  const [kind, setKind] = useState('제품 검색');
   const pressClearButton = () => {
     setName('');
-    setElem('');
   };
   const pressSearchButton = () => {
-    if (name || elem) {
+    if (text) {
       navigation.push('SearchResult', {
         search,
-        text: {
-          name,
-          elem,
-        },
+        text,
+        kind,
       });
     } else {
-      makeAlert('검색 실패', '제품명이나 성분명을 입력해주세요');
+      makeAlert('검색 실패', '검색어를 입력해주세요');
     }
   };
   return (
     <>
       <View style={styles.inputContainer}>
-        <Text style={styles.font}>제품명</Text>
+        <Picker
+          selectedValue={kind}
+          onValueChange={(itemValue, itemIndex) => setKind(itemValue)}
+          style={{
+            height: 100,
+            width: 250,
+            marginTop: 50,
+          }}>
+          {kinds.map(elem => (
+            <Picker.Item
+              style={{fontSize: 26, color: colors.darkGray}}
+              label={elem}
+              value={elem}
+            />
+          ))}
+        </Picker>
         <TextInput
-          style={[styles.input, {marginTop: 20}]}
+          style={[styles.input, {marginTop: 40}]}
           placeholder="한글, 영문"
-          value={name}
+          value={text}
           onChange={event => {
             const {text} = event.nativeEvent;
             setName(text);
-          }}
-        />
-        <Text style={styles.font}>성분명</Text>
-        <TextInput
-          style={[styles.input, {marginTop: 20}]}
-          placeholder="한글, 영문"
-          value={elem}
-          onChange={event => {
-            const {text} = event.nativeEvent;
-            setElem(text);
           }}
         />
       </View>
