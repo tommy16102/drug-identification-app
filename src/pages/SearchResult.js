@@ -33,10 +33,19 @@ const SearchResult = ({navigation, route}) => {
   const [result, setResult] = useState([]);
   useEffect(() => {
     const {kind, text} = route.params;
-    console.log(kind, text);
+    let api;
+    if (kind === '제품 검색') {
+      api = 'nameSearch';
+    } else if (kind === '성분 검색') {
+      api = 'ingredientSearch';
+    } else {
+      api = 'textSearch';
+    }
+
+    console.log(`http://192.168.0.12:8080/api/drug/${api}?query=${text}`);
     axios({
       method: 'get',
-      url: `http://192.168.0.12:8080/api/drug/nameSearch?query=${text}`,
+      url: `http://192.168.0.12:8080/api/drug/${api}?query=${text}`,
     })
       .then(function (response) {
         console.log(response.data.length);

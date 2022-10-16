@@ -13,6 +13,7 @@ const kinds = ['제품 검색', '성분 검색', '통합 검색'];
 const TextSearch = ({navigation, search}) => {
   const [text, setName] = useState('');
   const [kind, setKind] = useState('제품 검색');
+  const [word, setWord] = useState('제품 이름을 검색하세요');
   const pressClearButton = () => {
     setName('');
   };
@@ -27,12 +28,23 @@ const TextSearch = ({navigation, search}) => {
       makeAlert('검색 실패', '검색어를 입력해주세요');
     }
   };
+  useEffect(() => {
+    let word;
+    if (kind == '제품 검색') {
+      word = '제품 이름을 검색하세요';
+    } else if (kind == '성분 검색') {
+      word = '제품의 성분 이름을 검색하세요';
+    } else {
+      word = '제품의 이름이나 성분의 이름을 검색하세요';
+    }
+    setWord(word);
+  }, [kind]);
   return (
     <>
       <View style={styles.inputContainer}>
         <Picker
           selectedValue={kind}
-          onValueChange={(itemValue, itemIndex) => setKind(itemValue)}
+          onValueChange={itemValue => setKind(itemValue)}
           style={{
             height: 100,
             width: 250,
@@ -48,7 +60,7 @@ const TextSearch = ({navigation, search}) => {
         </Picker>
         <TextInput
           style={[styles.input, {marginTop: 40}]}
-          placeholder="한글, 영문"
+          placeholder={word}
           value={text}
           onChange={event => {
             const {text} = event.nativeEvent;
@@ -88,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: colors.gray,
     borderWidth: 2,
     borderRadius: 15,
-    fontSize: 26,
+    fontSize: 13.5,
     textAlign: 'center',
     fontWeight: 'bold',
     margin: 10,
