@@ -7,117 +7,182 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
+  Alert,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
 
+const windowHeight = Dimensions.get('window').height;
+
+const alertInfo = (title, content, onPress = null) => {
+  Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
+};
+
 const DrugDetail = ({navigation, route}) => {
   const [showInfo, setShowInfo] = useState(true);
-  console.log(route.params);
+  const {elem} = route.params;
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Logo w="100" m="30" />
-        <View style={styles.innerContainer}>
-          <View style={styles.topContainer}>
-            <Text style={styles.font}>{route.params.name}</Text>
-            <Image source={route.params.image} style={styles.icon} />
+    <View style={styles.container}>
+      <Logo w="100" m="30" />
+      <View style={styles.innerContainer}>
+        <View style={styles.topContainer}>
+          <Text style={styles.font}>{elem.drugName}</Text>
+          <Image source={route.params.image} style={styles.icon} />
+        </View>
+        <View style={[styles.bottomContainer]}>
+          <View style={styles.buttons}>
+            <Button
+              text="상세정보"
+              h="45"
+              w="95"
+              size="18"
+              m="25"
+              color={colors.lightGray}
+              press={() => setShowInfo(true)}
+            />
+            <Button
+              text="주의약품"
+              h="45"
+              w="95"
+              size="18"
+              m="25"
+              color={colors.lightRed}
+              press={() => setShowInfo(false)}
+            />
           </View>
-          <View style={[styles.bottomContainer]}>
-            <View style={styles.buttons}>
-              <Button
-                text="상세정보"
-                h="45"
-                w="95"
-                size="18"
-                m="25"
-                color={colors.lightGray}
-                press={() => setShowInfo(true)}
-              />
-              <Button
-                text="주의약품"
-                h="45"
-                w="95"
-                size="18"
-                m="25"
-                color={colors.lightRed}
-                press={() => setShowInfo(false)}
-              />
-            </View>
-            <ScrollView
-              style={[
-                styles.scrollView,
-                {
-                  backgroundColor: showInfo
-                    ? colors.lightGray
-                    : colors.lighterRed,
-                  borderColor: showInfo ? colors.gray : colors.darkRed,
-                },
-              ]}
-              centerContent={true}>
-              {showInfo && (
-                <>
-                  <View activeOpacity={0.6} style={styles.result}>
-                    <Text style={styles.resultfont}>주성분</Text>
-                    <Text style={styles.resultfont}>아나글립틴</Text>
-                  </View>
-                  <View activeOpacity={0.6} style={styles.result}>
-                    <Text style={styles.resultfont}>분류번호</Text>
-                    <Text style={styles.resultfont}>당뇨병용제</Text>
-                  </View>
-                  <View activeOpacity={0.6} style={styles.result}>
-                    <Text style={styles.resultfont}>효능</Text>
-                    <Text style={styles.resultfont}>혈당조절 향상</Text>
-                  </View>
-                  <View activeOpacity={0.6} style={styles.result}>
-                    <Text style={styles.resultfont}>투여방법</Text>
-                    <Text style={styles.resultfont}>1일2회 아침저녁 투여</Text>
-                  </View>
-                  <View activeOpacity={0.6} style={styles.result}>
-                    <Text style={styles.resultfont}>투여경로</Text>
-                    <Text style={styles.resultfont}>경구</Text>
-                  </View>
-                  <View
-                    activeOpacity={0.6}
-                    style={[styles.result, {marginBottom: 12}]}>
-                    <Text style={styles.resultfont}>제조회사</Text>
-                    <Text style={styles.resultfont}>제이더블유중외제약</Text>
-                  </View>
-                </>
-              )}
-              {!showInfo && (
-                <>
-                  <Text style={styles.fontTitle}>의약품 리스트</Text>
-                  <TouchableOpacity activeOpacity={0.6} style={styles.list}>
-                    <Image source={icons.pill4} style={styles.image} />
-                    <Text style={[styles.resultfont, {color: colors.darkRed}]}>
-                      글로비트정
+          <ScrollView
+            style={[
+              styles.scrollView,
+              {
+                backgroundColor: showInfo
+                  ? colors.lightGray
+                  : colors.lighterRed,
+                borderColor: showInfo ? colors.gray : colors.darkRed,
+              },
+            ]}
+            centerContent={true}>
+            {showInfo && (
+              <>
+                <View activeOpacity={0.6} style={styles.result}>
+                  <Text style={styles.resultfont}>주성분</Text>
+                  <ScrollView style={{marginLeft: 10}}>
+                    <Text
+                      style={[styles.resultfont]}
+                      numberOfLines={2}
+                      onPress={() =>
+                        alertInfo(
+                          '주성분',
+                          elem.drugIngredient.replace(/\n|\r/g, ''),
+                        )
+                      }>
+                      {elem.drugIngredient.replace(/\n|\r/g, '')}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.6} style={styles.list}>
-                    <Image source={icons.pill5} style={styles.image} />
-                    <Text style={[styles.resultfont, {color: colors.darkRed}]}>
-                      기네프정
+                  </ScrollView>
+                </View>
+                <View activeOpacity={0.6} style={styles.result}>
+                  <Text style={[styles.resultfont, {marginRight: 30}]}>
+                    효능
+                  </Text>
+                  <ScrollView>
+                    <Text
+                      style={styles.resultfont}
+                      numberOfLines={2}
+                      onPress={() =>
+                        alertInfo('효능', elem.drugEffect.replace(/\n|\r/g, ''))
+                      }>
+                      {elem.drugEffect.replace(/\n|\r/g, '')}
                     </Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </ScrollView>
-          </View>
+                  </ScrollView>
+                </View>
+                <View activeOpacity={0.6} style={styles.result}>
+                  <Text style={styles.resultfont}>투여방법</Text>
+                  <ScrollView>
+                    <Text
+                      style={styles.resultfont}
+                      numberOfLines={2}
+                      onPress={() =>
+                        alertInfo(
+                          '투여방법',
+                          elem.drugHowToUse.replace(/\n|\r/g, ''),
+                        )
+                      }>
+                      {elem.drugHowToUse.replace(/\n|\r/g, '')}
+                    </Text>
+                  </ScrollView>
+                </View>
+                <View activeOpacity={0.6} style={styles.result}>
+                  <Text style={styles.resultfont}>보관방법</Text>
+                  <ScrollView>
+                    <Text
+                      style={styles.resultfont}
+                      numberOfLines={2}
+                      onPress={() =>
+                        alertInfo(
+                          '보관방법',
+                          elem.drugStorage.replace(/\n|\r/g, ''),
+                        )
+                      }>
+                      {elem.drugStorage.replace(/\n|\r/g, '')}
+                    </Text>
+                  </ScrollView>
+                </View>
+                <View activeOpacity={0.6} style={styles.result}>
+                  <Text style={styles.resultfont}>주의사항</Text>
+                  <ScrollView>
+                    <Text
+                      style={styles.resultfont}
+                      numberOfLines={2}
+                      onPress={() =>
+                        alertInfo(
+                          '주의사항',
+                          elem.drugCaution.replace(/\n|\r/g, ''),
+                        )
+                      }>
+                      {elem.drugCaution.replace(/\n|\r/g, '')}
+                    </Text>
+                  </ScrollView>
+                </View>
+                <View
+                  activeOpacity={0.6}
+                  style={[styles.result, {marginBottom: 12}]}>
+                  <Text style={styles.resultfont}>제조회사</Text>
+                  <Text style={styles.resultfont}>{elem.drugCompany}</Text>
+                </View>
+              </>
+            )}
+            {!showInfo && (
+              <>
+                <Text style={styles.fontTitle}>의약품 리스트</Text>
+                <TouchableOpacity activeOpacity={0.6} style={styles.list}>
+                  <Image source={icons.pill4} style={styles.image} />
+                  <Text style={[styles.resultfont, {color: colors.darkRed}]}>
+                    글로비트정
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.6} style={styles.list}>
+                  <Image source={icons.pill5} style={styles.image} />
+                  <Text style={[styles.resultfont, {color: colors.darkRed}]}>
+                    기네프정
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </ScrollView>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.black,
+    height: windowHeight,
   },
   topContainer: {
     height: 95,
@@ -149,7 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   resultfont: {
-    fontSize: 17,
+    fontSize: 13,
     color: colors.black,
     fontWeight: 'bold',
     margin: 10,
@@ -219,7 +284,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     width: '90%',
-    height: 63,
+    height: 70,
     marginLeft: '5%',
     marginTop: 10,
   },

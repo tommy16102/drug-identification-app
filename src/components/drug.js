@@ -3,19 +3,12 @@ import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import {colors} from '../colors';
 import {icons} from '../images';
 
-const Drug = ({name, info, navigation, containerStyle, imageStyle}) => {
-  const {width: cWidth, height: cHeight} = containerStyle;
-  const {width: iWidth, height: iHeight} = imageStyle;
+const Drug = ({name, info, onPress, containerStyle, imageStyle}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.6}
       style={[styles.result, containerStyle]}
-      onPress={() =>
-        navigation.push('DrugDetail', {
-          image: icons.pill,
-          info,
-        })
-      }>
+      onPress={onPress}>
       <Image source={icons.pill} style={[styles.icon, imageStyle]} />
       <Text numberOfLines={3} style={styles.resultfont}>
         {name}
@@ -42,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   resultfont: {
-    fontSize: 15,
+    fontSize: 17,
     width: 130,
     color: colors.black,
     textAlign: 'center',

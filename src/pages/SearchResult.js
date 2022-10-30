@@ -92,6 +92,12 @@ const SearchResult = ({navigation, route}) => {
                     info={elem}
                     containerStyle={containerStyle}
                     imageStyle={imageStyle}
+                    onPress={() =>
+                      navigation.push('DrugDetail', {
+                        image: icons.pill,
+                        elem,
+                      })
+                    }
                   />
                 );
               })}
