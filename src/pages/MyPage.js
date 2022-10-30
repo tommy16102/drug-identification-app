@@ -43,7 +43,7 @@ const MyPage = ({navigation}) => {
       const param = {username, password};
       const result = await axios({
         method: 'post',
-        url: 'http://192.168.0.12:8080/api/login',
+        url: 'http://192.168.0.10:8080/api/login',
         params: param,
       });
       const {name, personalNumber, address} = result.data;
@@ -105,16 +105,19 @@ const MyPage = ({navigation}) => {
     if (res.data === '회원 주소 변경') {
       setAddress(ad);
       makeAlert('', '주소 변경 성공');
-    } else makeAlert('', '주소 변경 실패');
+    } else {
+      makeAlert('', '주소 변경 실패');
+    }
   };
 
   const onClickPwBtn = async () => {
-    if (!nowPw) makeAlert('비밀번호 변경 실패', '현재 비밀번호를 입력해주세요');
-    else if (!newPw || !checkPw)
+    if (!nowPw) {
+      makeAlert('비밀번호 변경 실패', '현재 비밀번호를 입력해주세요');
+    } else if (!newPw || !checkPw) {
       makeAlert('비밀번호 변경 실패', '새 비밀번호를 입력해주세요');
-    else if (!checkNewPw())
+    } else if (!checkNewPw()) {
       makeAlert('비밀번호 변경 실패', '올바른 새 비밀번호를 입력해주세요');
-    else {
+    } else {
       changePw()
         .then(async function (response) {
           if (response.data === '회원 비밀번호 변경 성공') {
@@ -276,7 +279,7 @@ const MyPage = ({navigation}) => {
                 size="22"
                 m="3"
                 color={colors.lightgray}
-                press={() => navigation.push('FindInfo')}
+                press={() => navigation.push('MyDrug')}
               />
             </>
           )}

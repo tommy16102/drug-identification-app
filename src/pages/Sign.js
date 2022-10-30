@@ -64,8 +64,9 @@ const Sign = ({navigation}) => {
     } else {
       signup()
         .then(function (response) {
-          if (response.data === '이미 존재하는 아이디입니다.')
+          if (response.data === '이미 존재하는 아이디입니다.') {
             throw new Error();
+          }
           makeAlert('회원가입 성공', '로그인 화면으로 이동합니다', () =>
             navigation.push('Login'),
           );
@@ -86,7 +87,7 @@ const Sign = ({navigation}) => {
     };
     return await axios({
       method: 'post',
-      url: 'http://192.168.0.12:8080/api/signup',
+      url: 'http://192.168.0.10:8080/api/signup',
       params: param,
     });
   };

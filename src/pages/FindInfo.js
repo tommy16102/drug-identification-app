@@ -81,7 +81,7 @@ const FindInfo = ({navigator}) => {
       };
       axios({
         method: 'post',
-        url: 'http://192.168.0.12:8080/api/findPw',
+        url: 'http://192.168.0.10:8080/api/findPw',
         params: param,
       }).then(async function (response) {
         if (response.data === '회원 정보가 비정확합니다.') {
@@ -101,7 +101,9 @@ const FindInfo = ({navigator}) => {
     return [...pw]
       .map(elem => {
         const rand = Math.floor(Math.random() * 10);
-        if (rand >= 5) return '*';
+        if (rand >= 5) {
+          return '*';
+        }
         return elem;
       })
       .join('');

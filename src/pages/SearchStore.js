@@ -41,7 +41,7 @@ const SearchStore = ({navigation, route}) => {
       const param = {username, password};
       const result = await axios({
         method: 'post',
-        url: 'http://192.168.0.12:8080/api/login',
+        url: 'http://192.168.0.10:8080/api/login',
         params: param,
       });
       const {address} = result.data;

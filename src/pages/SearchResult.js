@@ -15,19 +15,12 @@ import Logo from '../components/logo';
 import {icons} from '../images';
 import {Dimensions} from 'react-native';
 import axios from 'axios';
-
+import Drug from '../components/drug';
 const windowHeight = Dimensions.get('window').height;
-const SERVICE_KEY =
-  'E9thHyuD336GPbWvGhI5lioJfhnP46UHHHVj8fNGN%2BcQxoz7E0XE9eUugste1ew3Y2YJfIaS57aaFmEzsuohTA%3D%3D';
 
 const makeAlert = (title, content, onPress = null) => {
   Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
 };
-
-axios.defaults.withCredentials = true;
-const Axios = axios.create({
-  withCredentials: true,
-});
 
 const SearchResult = ({navigation, route}) => {
   const [result, setResult] = useState([]);
@@ -41,11 +34,9 @@ const SearchResult = ({navigation, route}) => {
     } else {
       api = 'textSearch';
     }
-
-    console.log(`http://192.168.0.12:8080/api/drug/${api}?query=${text}`);
     axios({
       method: 'get',
-      url: `http://192.168.0.12:8080/api/drug/${api}?query=${text}`,
+      url: `http://192.168.0.10:8080/api/drug/${api}?query=${text}`,
     })
       .then(function (response) {
         console.log(response.data.length);
@@ -90,24 +81,18 @@ const SearchResult = ({navigation, route}) => {
           </View>
           <View style={styles.bottomContainer}>
             <ScrollView style={styles.scrollView}>
-              {result.map(elem => {
-                console.log(elem);
+              {result.map((elem, idx) => {
                 const {drugName} = elem;
+                const containerStyle = {width: 305, height: 120};
+                const imageStyle = {width: 100, height: 100};
                 return (
-                  <TouchableOpacity
-                    activeOpacity={0.6}
-                    style={styles.result}
-                    onPress={() =>
-                      navigation.push('DrugDetail', {
-                        image: icons.pill,
-                        info: elem,
-                      })
-                    }>
-                    <Image source={icons.pill} style={styles.icon} />
-                    <Text numberOfLines={3} style={styles.resultfont}>
-                      {drugName}
-                    </Text>
-                  </TouchableOpacity>
+                  <Drug
+                    key={idx}
+                    name={drugName}
+                    info={elem}
+                    containerStyle={containerStyle}
+                    imageStyle={imageStyle}
+                  />
                 );
               })}
             </ScrollView>

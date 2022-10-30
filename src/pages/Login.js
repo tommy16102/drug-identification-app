@@ -16,19 +16,22 @@ const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const onClickLoginButton = async e => {
-    if (!username) makeAlert('로그인 실패', '아이디를 입력해주세요');
-    else if (!password) makeAlert('로그인 실패', '비밀번호를 입력해주세요');
-    else {
+    if (!username) {
+      makeAlert('로그인 실패', '아이디를 입력해주세요');
+    } else if (!password) {
+      makeAlert('로그인 실패', '비밀번호를 입력해주세요');
+    } else {
       const param = {username, password};
       axios({
         method: 'post',
-        url: 'http://192.168.0.12:8080/api/login',
+        url: 'http://192.168.0.10:8080/api/login',
         params: param,
       })
         .then(async function (response) {
           console.log(response.data);
-          if (response.data === '회원 정보가 비정확합니다.') throw new Error();
-          else {
+          if (response.data === '회원 정보가 비정확합니다.') {
+            throw new Error();
+          } else {
             await AsyncStorage.setItem(
               'user',
               JSON.stringify({username, password}),

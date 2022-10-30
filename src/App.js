@@ -10,6 +10,7 @@ import SearchResult from './pages/SearchResult';
 import DrugDetail from './pages/DrugDetail';
 import SearchStore from './pages/SearchStore';
 import MyPage from './pages/MyPage';
+import MyDrug from './pages/MyDrug';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -59,6 +60,11 @@ const App = () => {
         <Stack.Screen
           name="MyPage"
           component={MyPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MyDrug"
+          component={MyDrug}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
