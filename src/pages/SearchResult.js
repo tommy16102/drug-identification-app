@@ -53,21 +53,6 @@ const SearchResult = ({navigation, route}) => {
       });
   }, [navigation, route.params]);
 
-  // useEffect(() => {
-  //   const url =
-  //     '/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList?serviceKey=E9thHyuD336GPbWvGhI5lioJfhnP46UHHHVj8fNGN%2BcQxoz7E0XE9eUugste1ew3Y2YJfIaS57aaFmEzsuohTA%3D%3D&pageNo=1&numOfRows=10&itemName=%EA%B0%80&type=json';
-  //   const headers = {
-  //     'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  //     Accept: '*/*',
-  //   };
-  //   Axios.get(url, {headers})
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //     })
-  //     .catch(err => {
-  //       console.log('errr', err);
-  //     });
-  // }, [result]);
   return (
     <ScrollView>
       <View style={styles.container}>
