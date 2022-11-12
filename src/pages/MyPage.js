@@ -268,7 +268,7 @@ const MyPage = ({navigation}) => {
           {!isModal && (
             <>
               <Button
-                text="로아웃"
+                text="로그아웃"
                 h="55"
                 w="160"
                 size="22"

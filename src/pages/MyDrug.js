@@ -1,12 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Alert} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Alert,
+  AsyncStorage,
+} from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import {Dimensions} from 'react-native';
 import axios from 'axios';
 import Drug from '../components/drug';
-
+import {icons} from '../images';
+import {IP_ADDRESS, PORT} from '../config/config';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -16,12 +24,45 @@ const makeAlert = (title, content, onPress = null) => {
 };
 
 const MyDrug = ({navigation, route}) => {
-  const [result, setResult] = useState([
-    {drugName: 'drug1'},
-    {drugName: 'drug2'},
-    {drugName: 'drug3'},
-  ]); // api 써서 사용자 저장 약물 가져옴
-
+  const [id, setId] = useState('');
+  const [result, setResult] = useState([]); // api 써서 사용자 저장 약물 가져옴
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(async res => {
+      const {id} = JSON.parse(res);
+      setId(id);
+    });
+  }, []);
+  useEffect(() => {
+    const getLists = async () => {
+      const res = await axios.get(
+        `${IP_ADDRESS}:${PORT}/api/memberDrug/list?memberId=${id}`,
+      );
+      const res2 = await Promise.all(
+        res.data.map(async item => {
+          const result = await axios.get(
+            `${IP_ADDRESS}:${PORT}/api/drug?query=${item.drugId}`,
+          );
+          return result.data;
+        }),
+      );
+      setResult(res2);
+    };
+    if (id) {
+      getLists();
+    }
+  }, [id]);
+  const deleteDrug = async drugId => {
+    const param = {
+      memberId: id,
+      drugId,
+    };
+    setResult(result.filter(elem => elem.drugId != drugId));
+    return await axios({
+      method: 'post',
+      url: `${IP_ADDRESS}:${PORT}/api/memberDrug/delete`,
+      params: param,
+    });
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -38,13 +79,19 @@ const MyDrug = ({navigation, route}) => {
                 const imageStyle = {width: 80, height: 80};
                 return (
                   <>
-                    <View style={styles.drugContainer}>
+                    <View style={styles.drugContainer} key={idx}>
                       <Drug
                         key={idx}
-                        name={drugName}
+                        name={elem.drugName}
                         info={elem}
                         containerStyle={containerStyle}
                         imageStyle={imageStyle}
+                        onPress={() =>
+                          navigation.push('DrugDetail', {
+                            image: icons.pill,
+                            elem,
+                          })
+                        }
                       />
                       <Button
                         text={'🗑️'}
@@ -57,6 +104,7 @@ const MyDrug = ({navigation, route}) => {
                           makeAlert(
                             '의약품 삭제',
                             `${drugName}을 삭제하시겠습니까?`,
+                            () => deleteDrug(elem.drugId),
                           )
                         }
                       />
