@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   AsyncStorage,
+  ActivityIndicator,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -72,47 +73,54 @@ const MyDrug = ({navigation, route}) => {
             <Text style={[styles.font]}>내 약품 리스트</Text>
           </View>
           <View style={styles.bottomContainer}>
-            <ScrollView style={styles.scrollView}>
-              {result.map((elem, idx) => {
-                const {drugName} = elem;
-                const containerStyle = {width: 260, height: 100};
-                const imageStyle = {width: 80, height: 80};
-                return (
-                  <>
-                    <View style={styles.drugContainer} key={idx}>
-                      <Drug
-                        key={idx}
-                        name={elem.drugName}
-                        info={elem}
-                        containerStyle={containerStyle}
-                        imageStyle={imageStyle}
-                        onPress={() =>
-                          navigation.push('DrugDetail', {
-                            image: icons.pill,
-                            elem,
-                          })
-                        }
-                      />
-                      <Button
-                        text={'🗑️'}
-                        h="50"
-                        w="40"
-                        size="23"
-                        m="2"
-                        color={colors.lightgray}
-                        press={() =>
-                          makeAlert(
-                            '의약품 삭제',
-                            `${drugName}을 삭제하시겠습니까?`,
-                            () => deleteDrug(elem.drugId),
-                          )
-                        }
-                      />
-                    </View>
-                  </>
-                );
-              })}
-            </ScrollView>
+            {result.length === 0 ? (
+              <View style={styles.indicator}>
+                <ActivityIndicator size="large" color={colors.darkGray} />
+                <Text>잠시 기다려주세요...</Text>
+              </View>
+            ) : (
+              <ScrollView style={styles.scrollView}>
+                {result.map((elem, idx) => {
+                  const {drugName} = elem;
+                  const containerStyle = {width: 260, height: 100};
+                  const imageStyle = {width: 80, height: 80};
+                  return (
+                    <>
+                      <View style={styles.drugContainer} key={idx}>
+                        <Drug
+                          key={idx}
+                          name={elem.drugName}
+                          info={elem}
+                          containerStyle={containerStyle}
+                          imageStyle={imageStyle}
+                          onPress={() =>
+                            navigation.push('DrugDetail', {
+                              image: icons.pill,
+                              elem,
+                            })
+                          }
+                        />
+                        <Button
+                          text={'🗑️'}
+                          h="50"
+                          w="40"
+                          size="23"
+                          m="2"
+                          color={colors.lightgray}
+                          press={() =>
+                            makeAlert(
+                              '의약품 삭제',
+                              `${drugName}을 삭제하시겠습니까?`,
+                              () => deleteDrug(elem.drugId),
+                            )
+                          }
+                        />
+                      </View>
+                    </>
+                  );
+                })}
+              </ScrollView>
+            )}
           </View>
         </View>
       </View>
@@ -145,6 +153,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: colors.gray,
     borderWidth: 3,
+  },
+  indicator: {
+    alignItems: 'center',
+    fontSize: 15,
+    color: colors.darkGray,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   drugContainer: {
     flex: 1,
