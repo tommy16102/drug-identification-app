@@ -19,7 +19,7 @@ import Logo from '../components/logo';
 import Postcode from '@actbase/react-daum-postcode';
 import Address from '../components/address';
 import axios from 'axios';
-
+import {IP_ADDRESS, PORT} from '../config/config';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -43,7 +43,7 @@ const MyPage = ({navigation}) => {
       const param = {username, password};
       const result = await axios({
         method: 'post',
-        url: 'http://192.168.0.10:8080/api/login',
+        url: `${IP_ADDRESS}:${PORT}/api/login`,
         params: param,
       });
       const {name, personalNumber, address} = result.data;
@@ -86,7 +86,7 @@ const MyPage = ({navigation}) => {
     };
     return await axios({
       method: 'post',
-      url: 'http://192.168.0.12:8080/api/changePw',
+      url: `${IP_ADDRESS}/api/changePw`,
       params: param,
     });
   };
@@ -99,7 +99,7 @@ const MyPage = ({navigation}) => {
     };
     const res = await axios({
       method: 'post',
-      url: 'http://192.168.0.12:8080/api/changeAddress',
+      url: `${IP_ADDRESS}:${PORT}/api/changeAddress`,
       params: param,
     });
     if (res.data === '회원 주소 변경') {

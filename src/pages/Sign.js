@@ -15,7 +15,7 @@ import Postcode from '@actbase/react-daum-postcode';
 import Address from '../components/address';
 import {Dimensions} from 'react-native';
 import axios from 'axios';
-
+import {IP_ADDRESS, PORT} from '../config/config';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -47,7 +47,7 @@ const Sign = ({navigation}) => {
   };
   const checkPn = () => {
     const regExp = /\d{2}([0]\d|[1][0-2])([0][1-9]|[1-2]\d|[3][0-1])/g;
-    return regExp.test(+personNumber) && /[1-4]/g.test(+personSecNumber);
+    return regExp.test(personNumber) && /[1-4]/g.test(personSecNumber);
   };
   const onClickSubmitButton = async e => {
     console.log(checkName(), checkId(), checkPw(), checkPn());
@@ -87,7 +87,7 @@ const Sign = ({navigation}) => {
     };
     return await axios({
       method: 'post',
-      url: 'http://192.168.0.10:8080/api/signup',
+      url: `${IP_ADDRESS}:${PORT}/api/signup`,
       params: param,
     });
   };

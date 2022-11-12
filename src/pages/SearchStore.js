@@ -20,8 +20,8 @@ import Logo from '../components/logo';
 import {icons} from '../images';
 import Geolocation from 'react-native-geolocation-service';
 import axios from 'axios';
+import {IP_ADDRESS, PORT} from '../config/config';
 
-//거주지.
 const SearchStore = ({navigation, route}) => {
   const [mapPos, setMapPos] = useState(true); //default 현재위치
   const [address, setAddress] = useState('');
@@ -41,7 +41,7 @@ const SearchStore = ({navigation, route}) => {
       const param = {username, password};
       const result = await axios({
         method: 'post',
-        url: 'http://192.168.0.10:8080/api/login',
+        url: `${IP_ADDRESS}:${PORT}/api/login`,
         params: param,
       });
       const {address} = result.data;

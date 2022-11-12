@@ -14,7 +14,7 @@ import Logo from '../components/logo';
 import TouchableText from '../components/touchableText';
 import {Dimensions} from 'react-native';
 import axios from 'axios';
-
+import {IP_ADDRESS, PORT} from '../config/config';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -51,7 +51,7 @@ const FindInfo = ({navigator}) => {
       const param = {name, personalNumber: personNumber + personSecNumber};
       axios({
         method: 'post',
-        url: 'http://192.168.0.12:8080/api/findId',
+        url: `${IP_ADDRESS}:${PORT}/api/findId`,
         params: param,
       }).then(async function (response) {
         if (response.data === '회원 정보가 비정확합니다.') {
@@ -81,7 +81,7 @@ const FindInfo = ({navigator}) => {
       };
       axios({
         method: 'post',
-        url: 'http://192.168.0.10:8080/api/findPw',
+        url: `${IP_ADDRESS}:${PORT}/api/findPw`,
         params: param,
       }).then(async function (response) {
         if (response.data === '회원 정보가 비정확합니다.') {

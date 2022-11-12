@@ -5,6 +5,7 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import {Dimensions, Alert, AsyncStorage} from 'react-native';
+import {IP_ADDRESS, PORT} from '../config/config';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -24,7 +25,7 @@ const Login = ({navigation}) => {
       const param = {username, password};
       axios({
         method: 'post',
-        url: 'http://192.168.0.10:8080/api/login',
+        url: `${IP_ADDRESS}:${PORT}/api/login`,
         params: param,
       })
         .then(async function (response) {

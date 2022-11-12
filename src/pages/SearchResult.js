@@ -16,6 +16,7 @@ import {icons} from '../images';
 import {Dimensions} from 'react-native';
 import axios from 'axios';
 import Drug from '../components/drug';
+import {IP_ADDRESS, PORT} from '../config/config';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -36,7 +37,7 @@ const SearchResult = ({navigation, route}) => {
     }
     axios({
       method: 'get',
-      url: `http://192.168.0.10:8080/api/drug/${api}?query=${text}`,
+      url: `${IP_ADDRESS}:${PORT}/api/drug/${api}?query=${text}`,
     })
       .then(function (response) {
         console.log(response.data.length);
