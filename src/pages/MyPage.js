@@ -205,13 +205,17 @@ const MyPage = ({navigation}) => {
           <View style={styles.bottomContainer}>
             <View style={[styles.infoContainer, {left: 40}]}>
               <Text style={styles.label}>이름</Text>
-              <TextInput style={styles.input} value={name} editable={false} />
+              <TextInput
+                style={styles.input}
+                value={name ? name : '불러오는 중..'}
+                editable={false}
+              />
             </View>
             <View style={[styles.infoContainer, {left: 20}]}>
               <Text style={styles.label}>아이디</Text>
               <TextInput
                 style={styles.input}
-                value={username}
+                value={username ? username : '불러오는 중..'}
                 editable={false}
               />
             </View>
@@ -219,7 +223,7 @@ const MyPage = ({navigation}) => {
               <Text style={styles.label}>비밀번호</Text>
               <TextInput
                 style={styles.input}
-                value={password}
+                value={password ? password : '불러오는 중..'}
                 editable={false}
               />
               <Button
@@ -236,7 +240,7 @@ const MyPage = ({navigation}) => {
               <Text style={styles.label}>생년월일</Text>
               <TextInput
                 style={styles.input}
-                value={personNum}
+                value={personNum ? personNum : '불러오는 중..'}
                 editable={false}
               />
             </View>
@@ -244,7 +248,7 @@ const MyPage = ({navigation}) => {
               <Text style={styles.label}>주소</Text>
               <TextInput
                 style={[styles.input, {fontSize: 13}]}
-                value={address}
+                value={address ? address : '불러오는 중..'}
                 editable={false}
                 multiline={true}
               />
@@ -264,7 +268,7 @@ const MyPage = ({navigation}) => {
           {!isModal && (
             <>
               <Button
-                text="로그아웃"
+                text="로아웃"
                 h="55"
                 w="160"
                 size="22"

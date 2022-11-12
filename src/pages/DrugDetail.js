@@ -27,13 +27,28 @@ const alertInfo = (title, content, onPress = null) => {
 const DrugDetail = ({navigation, route}) => {
   const [showInfo, setShowInfo] = useState(true);
   const [id, setId] = useState('');
+  const [list, setList] = useState([]);
+  const [haveDrug, setHaveDrug] = useState(false);
   const {elem} = route.params;
   useEffect(() => {
     AsyncStorage.getItem('user').then(async res => {
       const {id} = JSON.parse(res);
       setId(id);
     });
-  }, []);
+    const getLists = async () => {
+      const res = await axios.get(
+        `${IP_ADDRESS}:${PORT}/api/memberDrug/list?memberId=${id}`,
+      );
+      const list = res.data.map(elem => elem.drugId);
+      setList(list);
+    };
+    if (id) {
+      getLists();
+    }
+  }, [id]);
+  useEffect(() => {
+    setHaveDrug(list.includes(elem.drugId));
+  }, [list]);
   const saveDrug = async () => {
     const param = {
       memberId: id,
@@ -52,12 +67,39 @@ const DrugDetail = ({navigation, route}) => {
           alertInfo('', '해당 의약품이 이미 저장되어 있습니다.');
         } else if (response.data === 'OK') {
           alertInfo('저장 성공', '의약품 리스트에 정상적으로 추가했습니다.');
+          setHaveDrug(true);
         } else {
           throw new Error();
         }
       })
       .catch(function (error) {
         alertInfo('저장 실패', '해당 의약품을 저장할 수 없습니다.');
+      });
+  };
+  const deleteDrug = async () => {
+    const param = {
+      memberId: id,
+      drugId: elem.drugId,
+    };
+    return await axios({
+      method: 'post',
+      url: `${IP_ADDRESS}:${PORT}/api/memberDrug/delete`,
+      params: param,
+    });
+  };
+  const onClickDeleteButton = async () => {
+    deleteDrug()
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data === 'ok') {
+          alertInfo('삭제 성공', '의약품 리스트에서 삭제되었습니다.');
+          setHaveDrug(false);
+        } else {
+          throw new Error();
+        }
+      })
+      .catch(function (error) {
+        alertInfo('삭제 실패', '해당 의약품을 삭제할 수 없습니다.');
       });
   };
   return (
@@ -214,16 +256,33 @@ const DrugDetail = ({navigation, route}) => {
                 </TouchableOpacity>
               </>
             )}
-            <View style={{alignItems: 'center'}}>
-              <Button
-                text="저장하기"
-                h="50"
-                w="105"
-                size="18"
-                m="10"
-                color={colors.lightgray}
-                press={onClickSaveButton}
-              />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {!haveDrug ? (
+                <Button
+                  text="저장하기"
+                  h="50"
+                  w="110"
+                  size="17"
+                  m="10"
+                  color={colors.selectedGray}
+                  press={onClickSaveButton}
+                />
+              ) : (
+                <Button
+                  text="삭제하기"
+                  h="50"
+                  w="110"
+                  size="18"
+                  m="10"
+                  color={colors.lighterRed}
+                  press={onClickDeleteButton}
+                />
+              )}
             </View>
           </ScrollView>
         </View>
