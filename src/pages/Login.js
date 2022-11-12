@@ -29,13 +29,13 @@ const Login = ({navigation}) => {
         params: param,
       })
         .then(async function (response) {
-          console.log(response.data);
           if (response.data === '회원 정보가 비정확합니다.') {
             throw new Error();
           } else {
+            const {id} = response.data;
             await AsyncStorage.setItem(
               'user',
-              JSON.stringify({username, password}),
+              JSON.stringify({id, username, password}),
             );
             makeAlert('로그인 성공', '메인 화면으로 이동합니다', () =>
               navigation.push('Main'),

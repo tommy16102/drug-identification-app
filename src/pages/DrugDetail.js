@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  TextInput,
+  AsyncStorage,
   Text,
   Image,
   TouchableOpacity,
@@ -14,22 +14,66 @@ import {colors} from '../colors';
 import Button from '../components/button';
 import Logo from '../components/logo';
 import {icons} from '../images';
-
+import {IP_ADDRESS, PORT} from '../config/config';
+import axios from 'axios';
 const windowHeight = Dimensions.get('window').height;
 
 const alertInfo = (title, content, onPress = null) => {
   Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
 };
 
+// "/api/memberDrug/add"
+
 const DrugDetail = ({navigation, route}) => {
   const [showInfo, setShowInfo] = useState(true);
+  const [id, setId] = useState('');
   const {elem} = route.params;
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(async res => {
+      const {id} = JSON.parse(res);
+      setId(id);
+    });
+  }, []);
+  const saveDrug = async () => {
+    const param = {
+      memberId: id,
+      drugId: elem.drugId,
+    };
+    return await axios({
+      method: 'post',
+      url: `${IP_ADDRESS}:${PORT}/api/memberDrug/add`,
+      params: param,
+    });
+  };
+  const onClickSaveButton = async () => {
+    saveDrug()
+      .then(function (response) {
+        if (response.data === '이미 있어요') {
+          alertInfo('', '해당 의약품이 이미 저장되어 있습니다.');
+        } else if (response.data === 'OK') {
+          alertInfo('저장 성공', '의약품 리스트에 정상적으로 추가했습니다.');
+        } else {
+          throw new Error();
+        }
+      })
+      .catch(function (error) {
+        alertInfo('저장 실패', '해당 의약품을 저장할 수 없습니다.');
+      });
+  };
   return (
     <View style={styles.container}>
       <Logo w="100" m="30" />
       <View style={styles.innerContainer}>
         <View style={styles.topContainer}>
-          <Text style={styles.font}>{elem.drugName}</Text>
+          <Text
+            style={styles.font}
+            numberOfLines={2}
+            onPress={() =>
+              alertInfo('의약품명', elem.drugName.replace(/\n|\r/g, ''))
+            }>
+            {elem.drugName.slice(0, 10)}
+            {elem.drugName.length > 10 && '...'}
+          </Text>
           <Image source={route.params.image} style={styles.icon} />
         </View>
         <View style={[styles.bottomContainer]}>
@@ -170,6 +214,17 @@ const DrugDetail = ({navigation, route}) => {
                 </TouchableOpacity>
               </>
             )}
+            <View style={{alignItems: 'center'}}>
+              <Button
+                text="저장하기"
+                h="50"
+                w="105"
+                size="18"
+                m="10"
+                color={colors.lightgray}
+                press={onClickSaveButton}
+              />
+            </View>
           </ScrollView>
         </View>
       </View>
@@ -209,7 +264,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   font: {
-    fontSize: 26,
+    fontSize: 16,
     color: colors.darkerGray,
     fontWeight: 'bold',
   },

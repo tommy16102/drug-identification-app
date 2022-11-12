@@ -41,7 +41,6 @@ const SearchResult = ({navigation, route}) => {
       url: `${IP_ADDRESS}:${PORT}/api/drug/${api}?query=${text}`,
     })
       .then(function (response) {
-        console.log(response.data.length);
         if (response.data.length === 0) {
           makeAlert('검색 실패', '검색 조건에 맞는 약품이 없습니다', () =>
             navigation.push('SearchDrug', {find: true}),
