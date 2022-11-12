@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 import {colors} from '../colors';
@@ -66,28 +67,35 @@ const SearchResult = ({navigation, route}) => {
             <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
           </View>
           <View style={styles.bottomContainer}>
-            <ScrollView style={styles.scrollView}>
-              {result.map((elem, idx) => {
-                const {drugName} = elem;
-                const containerStyle = {width: 305, height: 120};
-                const imageStyle = {width: 100, height: 100};
-                return (
-                  <Drug
-                    key={idx}
-                    name={drugName}
-                    info={elem}
-                    containerStyle={containerStyle}
-                    imageStyle={imageStyle}
-                    onPress={() =>
-                      navigation.push('DrugDetail', {
-                        image: icons.pill,
-                        elem,
-                      })
-                    }
-                  />
-                );
-              })}
-            </ScrollView>
+            {result.length > 0 ? (
+              <ScrollView style={styles.scrollView}>
+                {result.map((elem, idx) => {
+                  const {drugName} = elem;
+                  const containerStyle = {width: 305, height: 120};
+                  const imageStyle = {width: 100, height: 100};
+                  return (
+                    <Drug
+                      key={idx}
+                      name={drugName}
+                      info={elem}
+                      containerStyle={containerStyle}
+                      imageStyle={imageStyle}
+                      onPress={() =>
+                        navigation.push('DrugDetail', {
+                          image: icons.pill,
+                          elem,
+                        })
+                      }
+                    />
+                  );
+                })}
+              </ScrollView>
+            ) : (
+              <View style={styles.indicator}>
+                <ActivityIndicator size="large" color={colors.darkGray} />
+                <Text>잠시 기다려주세요...</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -166,6 +174,13 @@ const styles = StyleSheet.create({
     margin: 10,
     width: 305,
     height: 120,
+  },
+  indicator: {
+    alignItems: 'center',
+    fontSize: 15,
+    color: colors.darkGray,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
