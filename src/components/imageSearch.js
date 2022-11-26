@@ -20,12 +20,10 @@ const alertInfo = (title, content, onPress = null) => {
 
 const ImageSearch = ({navigation, route, search}) => {
   const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
   const [uri1, setURI1] = useState('');
-  const [uri2, setURI2] = useState('');
   const [visible, setVisible] = useState(false);
   const checkImage = () => {
-    return !image1 || !image2;
+    return !image1;
   };
 
   const clickClear = () => {
@@ -34,9 +32,7 @@ const ImageSearch = ({navigation, route, search}) => {
 
   const resetImages = () => {
     setImage1(false);
-    setImage2(false);
     setURI1('');
-    setURI2('');
   };
 
   const clickCameraImage1Search = async () => {
@@ -52,17 +48,18 @@ const ImageSearch = ({navigation, route, search}) => {
     setImage1(true);
   };
 
-  const clickCameraImage2Search = async () => {
-    const result = await launchCamera({
-      mediaType: 'photo',
-      cameraType: 'back',
-    });
-    if (result.didCancel) {
-      return null;
+  const clickLocalImageSearch = async () => {
+    if (image1) {
+      setImage1(false);
+    } else {
+      const result = await launchImageLibrary();
+      if (result.didCancel) {
+        return null;
+      }
+      const URI = result.assets[0].uri;
+      setURI1(URI);
+      setImage1(true);
     }
-    const URI = result.assets[0].uri;
-    setURI2(URI);
-    setImage2(true);
   };
 
   const clickSearchWidthIdf = () => {
@@ -96,18 +93,12 @@ const ImageSearch = ({navigation, route, search}) => {
             style={styles.icon}
           />
         </View>
-        <View style={styles.iconContainer}>
-          <Image
-            source={image2 ? {uri: uri2} : icons.camera}
-            style={styles.icon}
-          />
-        </View>
       </View>
       <View style={styles.imageButtonContainer}>
         {checkImage() && (
           <>
             <Button
-              text={'앞면 촬영하기'}
+              text={'촬영하기'}
               h="55"
               w="300"
               size="22"
@@ -116,13 +107,13 @@ const ImageSearch = ({navigation, route, search}) => {
               press={clickCameraImage1Search}
             />
             <Button
-              text={'뒷면 촬영하기'}
+              text={'갤러리에서 가져오기'}
               h="55"
               w="300"
               size="22"
               m="10"
               color={colors.lightgray}
-              press={clickCameraImage2Search}
+              press={clickLocalImageSearch}
             />
           </>
         )}
@@ -174,8 +165,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 140,
-    height: 140,
+    width: 150,
+    height: 150,
     backgroundColor: 'white',
     borderColor: colors.lightGray,
     borderWidth: 4,
@@ -183,8 +174,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   icon: {
-    width: '90%',
-    height: '90%',
+    width: '85%',
+    height: '85%',
     resizeMode: 'contain',
     borderColor: colors.gray,
     borderRadius: 3,
