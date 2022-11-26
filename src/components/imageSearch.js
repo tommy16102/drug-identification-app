@@ -5,6 +5,9 @@ import Button from '../components/button';
 import {icons} from '../images';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import DialogInput from 'react-native-dialog-input';
+import ImagePicker from 'react-native-image-crop-picker';
+
+//import PhotoEditor from '@baronha/react-native-photo-editor';
 //import Dialog from 'react-native-dialog';
 // import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
 
@@ -19,47 +22,48 @@ const alertInfo = (title, content, onPress = null) => {
 };
 
 const ImageSearch = ({navigation, route, search}) => {
-  const [image1, setImage1] = useState(false);
-  const [uri1, setURI1] = useState('');
+  const [image, setImage] = useState(false);
+  const [uri, setURI] = useState('');
   const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    console.log(uri);
+  }, [uri]);
   const checkImage = () => {
-    return !image1;
+    return !image;
   };
-
   const clickClear = () => {
     makeAlert('', '이미지를 지우시겠습니까?', resetImages);
   };
-
+  // const cropImage = async () => {
+  //   const result = await PhotoEditor.open({
+  //     path: uri,
+  //   });
+  // };
   const resetImages = () => {
-    setImage1(false);
-    setURI1('');
+    setImage(false);
+    setURI('');
   };
 
-  const clickCameraImage1Search = async () => {
-    const result = await launchCamera({
-      mediaType: 'photo',
-      cameraType: 'back',
+  const clickCameraImageSearch = async () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(img => {
+      setImage(true);
+      setURI(img.path);
     });
-    if (result.didCancel) {
-      return null;
-    }
-    const URI = result.assets[0].uri;
-    setURI1(URI);
-    setImage1(true);
   };
 
   const clickLocalImageSearch = async () => {
-    if (image1) {
-      setImage1(false);
-    } else {
-      const result = await launchImageLibrary();
-      if (result.didCancel) {
-        return null;
-      }
-      const URI = result.assets[0].uri;
-      setURI1(URI);
-      setImage1(true);
-    }
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(img => {
+      setImage(true);
+      setURI(img.path);
+    });
   };
 
   const clickSearchWidthIdf = () => {
@@ -89,7 +93,7 @@ const ImageSearch = ({navigation, route, search}) => {
       <View style={styles.imageContainer}>
         <View style={styles.iconContainer}>
           <Image
-            source={image1 ? {uri: uri1} : icons.camera}
+            source={image ? {uri: uri} : icons.camera}
             style={styles.icon}
           />
         </View>
@@ -104,7 +108,7 @@ const ImageSearch = ({navigation, route, search}) => {
               size="22"
               m="10"
               color={colors.lightgray}
-              press={clickCameraImage1Search}
+              press={clickCameraImageSearch}
             />
             <Button
               text={'갤러리에서 가져오기'}
