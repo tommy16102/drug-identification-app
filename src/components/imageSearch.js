@@ -83,7 +83,11 @@ const ImageSearch = ({navigation, route, search}) => {
           if (!inputText) {
             alertInfo('', '식별자를 입력해주세요');
           } else {
-            navigation.push('SearchResult', {search: search});
+            navigation.push('SearchResult', {
+              search: search,
+              text: inputText,
+              uri,
+            });
           }
         }}
         closeDialog={() => {
@@ -133,7 +137,9 @@ const ImageSearch = ({navigation, route, search}) => {
               size="22"
               m="10"
               color={colors.lightgray}
-              press={() => navigation.push('SearchResult', {search: search})}
+              press={() =>
+                navigation.push('SearchResult', {search: search, uri})
+              }
             />
             <Button
               text={'식별자와 함께 검색하기'}

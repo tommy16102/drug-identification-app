@@ -50,8 +50,9 @@ const TextSearch = ({navigation, search}) => {
             width: 250,
             marginTop: 50,
           }}>
-          {kinds.map(elem => (
+          {kinds.map((elem, idx) => (
             <Picker.Item
+              key={idx}
               style={{fontSize: 26, color: colors.darkGray}}
               label={elem}
               value={elem}
