@@ -66,6 +66,11 @@ const SearchResult = ({navigation, route}) => {
             <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
           </View>
           <View style={styles.bottomContainer}>
+            {result.length > 0 && route.params.search === '이미지' && (
+              <Text style={styles.headerFont}>
+                검색 결과 중 하나를 선택하세요
+              </Text>
+            )}
             {result.length > 0 ? (
               <ScrollView style={styles.scrollView}>
                 {result.map((elem, idx) => {
@@ -133,6 +138,12 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: colors.darkerGray,
     fontWeight: 'bold',
+  },
+  headerFont: {
+    fontSize: 15,
+    color: colors.darkerGray,
+    fontWeight: 'bold',
+    marginTop: 5,
   },
   resultfont: {
     fontSize: 15,

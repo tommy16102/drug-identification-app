@@ -69,7 +69,7 @@ const MyPage = ({navigation}) => {
   const pressLogout = async () => {
     await AsyncStorage.removeItem('user');
     makeAlert('로그아웃 성공', '메인 화면으로 이동합니다', () =>
-      navigation.push('Main'),
+      navigation.replace('Main'),
     );
   };
 
