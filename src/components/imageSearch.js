@@ -49,6 +49,7 @@ const ImageSearch = ({navigation, route, search}) => {
       width: 300,
       height: 400,
       cropping: true,
+      freeStyleCropEnabled: true,
     }).then(img => {
       setImage(true);
       setURI(img.path);
@@ -58,8 +59,9 @@ const ImageSearch = ({navigation, route, search}) => {
   const clickLocalImageSearch = async () => {
     ImagePicker.openPicker({
       width: 300,
-      height: 400,
+      height: 300,
       cropping: true,
+      freeStyleCropEnabled: true,
     }).then(img => {
       setImage(true);
       setURI(img.path);
@@ -95,6 +97,7 @@ const ImageSearch = ({navigation, route, search}) => {
           <Image
             source={image ? {uri: uri} : icons.camera}
             style={styles.icon}
+            resizeMode="contain"
           />
         </View>
       </View>
