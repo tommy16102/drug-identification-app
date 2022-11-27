@@ -1,15 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import {colors} from '../colors';
 import {icons} from '../images';
 
-const Drug = ({name, info, onPress, containerStyle, imageStyle}) => {
+const Drug = ({name, drugId, onPress, containerStyle, imageStyle}) => {
+  const [hasImage, setHasImage] = useState(false);
+  const URL = `https://sotree-dia-images.s3.ap-northeast-2.amazonaws.com/images/${drugId}.png`;
+  const checkImageURL = URL => {
+    fetch(URL)
+      .then(res => {
+        if (res.status === 403) {
+          setHasImage(false);
+        } else {
+          setHasImage(true);
+        }
+      })
+      .catch(err => {
+        setHasImage(false);
+      });
+  };
+  useEffect(() => {
+    checkImageURL(URL);
+  }, [URL]);
   return (
     <TouchableOpacity
       activeOpacity={0.6}
       style={[styles.result, containerStyle]}
       onPress={onPress}>
-      <Image source={icons.pill} style={[styles.icon, imageStyle]} />
+      <Image
+        source={hasImage ? {uri: URL} : icons.pill}
+        style={[styles.icon, imageStyle]}
+      />
       <Text numberOfLines={3} style={styles.resultfont}>
         {name}
       </Text>

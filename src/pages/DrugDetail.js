@@ -29,7 +29,26 @@ const DrugDetail = ({navigation, route}) => {
   const [id, setId] = useState('');
   const [list, setList] = useState([]);
   const [haveDrug, setHaveDrug] = useState(false);
+  const [hasImage, setHasImage] = useState(false);
   const {elem} = route.params;
+  const {drugId} = elem;
+  const URL = `https://sotree-dia-images.s3.ap-northeast-2.amazonaws.com/images/${drugId}.png`;
+  const checkImageURL = URL => {
+    fetch(URL)
+      .then(res => {
+        if (res.status === 403) {
+          setHasImage(false);
+        } else {
+          setHasImage(true);
+        }
+      })
+      .catch(err => {
+        setHasImage(false);
+      });
+  };
+  useEffect(() => {
+    checkImageURL(URL);
+  }, [URL]);
   useEffect(() => {
     AsyncStorage.getItem('user').then(async res => {
       const {id} = JSON.parse(res);
@@ -116,7 +135,10 @@ const DrugDetail = ({navigation, route}) => {
             {elem.drugName.slice(0, 10)}
             {elem.drugName.length > 10 && '...'}
           </Text>
-          <Image source={route.params.image} style={styles.icon} />
+          <Image
+            source={hasImage ? {uri: URL} : route.params.image}
+            style={styles.icon}
+          />
         </View>
         <View style={[styles.bottomContainer]}>
           <View style={styles.buttons}>

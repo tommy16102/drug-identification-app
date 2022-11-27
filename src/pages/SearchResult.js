@@ -69,13 +69,14 @@ const SearchResult = ({navigation, route}) => {
             {result.length > 0 ? (
               <ScrollView style={styles.scrollView}>
                 {result.map((elem, idx) => {
-                  const {drugName} = elem;
+                  const {drugName, drugId} = elem;
                   const containerStyle = {width: 305, height: 120};
                   const imageStyle = {width: 100, height: 100};
                   return (
                     <Drug
                       key={idx}
                       name={drugName}
+                      drugId={drugId}
                       info={elem}
                       containerStyle={containerStyle}
                       imageStyle={imageStyle}

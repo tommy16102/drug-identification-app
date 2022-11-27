@@ -90,6 +90,7 @@ const MyDrug = ({navigation, route}) => {
                         <Drug
                           key={idx}
                           name={elem.drugName}
+                          drugId={elem.drugId}
                           info={elem}
                           containerStyle={containerStyle}
                           imageStyle={imageStyle}

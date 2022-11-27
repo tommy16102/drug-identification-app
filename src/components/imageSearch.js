@@ -32,7 +32,7 @@ const ImageSearch = ({navigation, route, search}) => {
     return !image;
   };
   const clickClear = () => {
-    makeAlert('', '이미지를 지우시겠습니까?', resetImages);
+    makeAlert('', '현재 이미지를 지우시겠습니까?', resetImages);
   };
   // const cropImage = async () => {
   //   const result = await PhotoEditor.open({
@@ -47,7 +47,7 @@ const ImageSearch = ({navigation, route, search}) => {
   const clickCameraImageSearch = async () => {
     ImagePicker.openCamera({
       width: 300,
-      height: 400,
+      height: 300,
       cropping: true,
       freeStyleCropEnabled: true,
     }).then(img => {
