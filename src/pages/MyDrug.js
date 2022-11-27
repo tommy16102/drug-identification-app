@@ -24,6 +24,10 @@ const makeAlert = (title, content, onPress = null) => {
   });
 };
 
+const makeInfoAlert = (title, content, onPress = null) => {
+  Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
+};
+
 const MyDrug = ({navigation, route}) => {
   const [id, setId] = useState('');
   const [result, setResult] = useState([]); // api 써서 사용자 저장 약물 가져옴
@@ -46,6 +50,13 @@ const MyDrug = ({navigation, route}) => {
           return result.data;
         }),
       );
+      if (res2.length === 0) {
+        makeInfoAlert('', '약물 리스트에 저장된 약품이 없습니다', () =>
+          navigation.push('MyPage'),
+        );
+      } else {
+        setResult(res2);
+      }
       setResult(res2);
     };
     if (id) {
