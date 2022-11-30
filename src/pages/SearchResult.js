@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Modal,
 } from 'react-native';
 import {colors} from '../colors';
 import Button from '../components/button';
@@ -18,6 +19,7 @@ import {Dimensions} from 'react-native';
 import axios from 'axios';
 import Drug from '../components/drug';
 import {IP_ADDRESS, PORT} from '../config/config';
+import {WebView} from 'react-native-webview';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
@@ -34,8 +36,11 @@ const makeAlert = (title, content, onPress = null) => {
 
 const SearchResult = ({navigation, route}) => {
   const [result, setResult] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [url, setUrl] = useState('');
   useEffect(() => {
     const {search} = route.params;
+    console.log(route.params);
     let api;
     if (search) {
       const {kind, text} = route.params;
@@ -51,6 +56,7 @@ const SearchResult = ({navigation, route}) => {
         url: `${IP_ADDRESS}:${PORT}/api/drug/${api}?query=${text}`,
       })
         .then(function (response) {
+          console.log(response.data);
           if (response.data.length === 0) {
             makeAlert('검색 실패', '검색 조건에 맞는 약품이 없습니다', () =>
               navigation.push('SearchDrug', {find: true}),
@@ -60,32 +66,93 @@ const SearchResult = ({navigation, route}) => {
           }
         })
         .catch(function (error) {
-          console.log(error);
+          console.log('err', error.response);
         });
     } else {
-      const {uri, text} = route.params;
-      let formData = new FormData();
-      formData.append('photo', {uri, name: 'image.jpg', type: 'image/jpg'});
-      if (text) {
-        formData.append('text', text);
-      }
-      console.log(formData);
-      axios
-        .post('http://35.206.222.109:5000/output', formData, {
-          headers: {'Content-Type': 'multipart/form-data'},
-        })
-        .then(res => {
-          setResult(res.data);
+      let {uri, text} = route.params;
+      text = text || '';
+      console.log(uri, text);
+      const localUri = uri;
+      const filename = localUri.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename ?? '');
+      const type = match ? `image/${match[1]}` : 'image';
+      const formData = new FormData();
+      formData.append('img', {uri: localUri, name: filename, type});
+      const send = async formdata => {
+        return await axios({
+          method: 'post',
+          url: 'http://35.206.222.109:5000/imageload',
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+          data: formdata,
+        });
+      };
+      send(formData)
+        .then(async res => {
+          console.log('axios 통과', res.data);
+          const result = await axios({
+            method: 'post',
+            url: 'http://35.206.222.109:5000/deepjson',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({identifier: text}),
+          });
+          if (result.data.length === 0) {
+            makeAlert('검색 실패', '검색 조건에 맞는 약품이 없습니다', () =>
+              navigation.push('SearchDrug', {find: false}),
+            );
+          } else {
+            const res2 = await Promise.all(
+              result.data.map(async item => {
+                const result = await axios.get(
+                  `${IP_ADDRESS}:${PORT}/api/drug?query=${+item[0]}`,
+                );
+                return result.data;
+              }),
+            );
+            setResult(res2);
+          }
         })
         .catch(err => {
-          console.log(err.response);
+          console.log('err', err, err.response.request._response);
         });
     }
   }, [navigation, route.params]);
 
+  console.log(route.params);
   return (
     <ScrollView>
       <View style={styles.container}>
+        <Modal
+          visible={isOpen}
+          animationType="fade"
+          transparent={true}
+          statusBarTranslucent={true}
+          onRequestClose={() => setIsOpen(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.viewContainer}>
+              <WebView
+                source={{
+                  uri: url,
+                }}
+                style={{width: 350, borderRadius: 15}}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                text="닫기"
+                h="50"
+                w="85"
+                size="20"
+                m="15"
+                color={colors.lightgray}
+                press={() => setIsOpen(false)}
+              />
+            </View>
+          </View>
+        </Modal>
         <Logo w="100" m="30" />
         <View style={styles.innerContainer}>
           <View style={styles.topContainer}>
@@ -95,7 +162,7 @@ const SearchResult = ({navigation, route}) => {
             <Text style={[styles.font, {marginLeft: 30}]}>검색 결과</Text>
           </View>
           <View style={styles.bottomContainer}>
-            {result.length > 0 && route.params.search === '이미지' && (
+            {result.length > 0 && route.params.search === false && (
               <Text style={styles.headerFont}>
                 검색 결과 중 하나를 선택하세요
               </Text>
@@ -103,25 +170,41 @@ const SearchResult = ({navigation, route}) => {
             {result.length > 0 ? (
               <ScrollView style={styles.scrollView}>
                 {result.map((elem, idx) => {
+                  console.log(elem);
                   const {drugName, drugId} = elem;
                   const containerStyle = {width: 305, height: 120};
                   const imageStyle = {width: 100, height: 100};
-                  return (
-                    <Drug
-                      key={idx}
-                      name={drugName}
-                      drugId={drugId}
-                      info={elem}
-                      containerStyle={containerStyle}
-                      imageStyle={imageStyle}
-                      onPress={() =>
-                        navigation.push('DrugDetail', {
-                          image: icons.pill,
-                          elem,
-                        })
-                      }
-                    />
-                  );
+                  if (typeof elem === 'object') {
+                    return (
+                      <Drug
+                        key={idx}
+                        name={drugName}
+                        drugId={drugId}
+                        info={elem}
+                        containerStyle={containerStyle}
+                        imageStyle={imageStyle}
+                        onPress={() =>
+                          navigation.push('DrugDetail', {
+                            image: icons.pill,
+                            elem,
+                          })
+                        }
+                      />
+                    );
+                  } else {
+                    return (
+                      <Drug
+                        key={idx}
+                        name={'의약품을 확인하세요'}
+                        containerStyle={containerStyle}
+                        imageStyle={imageStyle}
+                        onPress={() => {
+                          setIsOpen(true);
+                          setUrl(elem);
+                        }}
+                      />
+                    );
+                  }
                 })}
               </ScrollView>
             ) : (
@@ -168,8 +251,45 @@ const styles = StyleSheet.create({
     color: colors.darkerGray,
     fontWeight: 'bold',
   },
+  modalContainer: {
+    flex: 0.95,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    margin: 10,
+    marginTop: 240,
+    borderRadius: 15,
+    borderColor: colors.darkGray,
+    borderWidth: 2,
+  },
+  viewContainer: {
+    flex: 0.9,
+    width: '95%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.lighterGray,
+    margin: 10,
+    borderRadius: 15,
+    borderColor: colors.darkGray,
+    borderWidth: 2,
+    padding: 5,
+  },
+  buttonContainer: {
+    flex: 0.08,
+    width: '20%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.lightgray,
+    margin: 10,
+    borderRadius: 15,
+    borderColor: colors.darkGray,
+    borderWidth: 2,
+  },
   headerFont: {
-    fontSize: 15,
+    fontSize: 16,
     color: colors.darkerGray,
     fontWeight: 'bold',
     marginTop: 5,
