@@ -5,6 +5,8 @@
 ### 애플리케이션 구조
 <img src="https://user-images.githubusercontent.com/75344562/206858999-42b9313c-9355-4ffd-b213-3617e400963b.png" width="300" height="200">
 
+[백엔드 링크](https://github.com/ParangBird/drug-identification-app-backend)
+
 ### 주요 기능
 - 의약품 텍스트 검색
 - 의약품 이미지 검색
@@ -13,3 +15,6 @@
 
 ### 주요 화면
 ![image](https://user-images.githubusercontent.com/75344562/206859101-9ee7d570-3021-4505-89d1-49d9ea430b45.png)
+
+### 추후 추가예정
+- 의약품 검색 결과 무한 스크롤
