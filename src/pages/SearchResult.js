@@ -2,10 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  TextInput,
   Text,
-  Image,
-  TouchableOpacity,
+  FlatList,
   ScrollView,
   ActivityIndicator,
   Alert,
@@ -20,27 +18,25 @@ import axios from 'axios';
 import Drug from '../components/drug';
 import {IP_ADDRESS, PORT} from '../config/config';
 import {WebView} from 'react-native-webview';
+import {render} from 'node-sass';
 const windowHeight = Dimensions.get('window').height;
 
 const makeAlert = (title, content, onPress = null) => {
   Alert.alert(title, content, [{text: '닫기', onPress}], {cancelable: false});
 };
 
-/*
-
-  search: true(텍스트), false(이미지)
-  텍스트 검색 -> kind / text (검색 종류, 검색어)
-  이미지 검색 -> uri / text (이미지, 식별자)
-
-*/
-
 const SearchResult = ({navigation, route}) => {
   const [result, setResult] = useState([]);
+  const [part, setPart] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    setPart(result.slice(0, 4));
+  }, [result]);
+
   useEffect(() => {
     const {search} = route.params;
-    console.log(route.params);
     let api;
     if (search) {
       const {kind, text} = route.params;
@@ -56,7 +52,6 @@ const SearchResult = ({navigation, route}) => {
         url: `${IP_ADDRESS}:${PORT}/api/drug/${api}?query=${text}`,
       })
         .then(function (response) {
-          console.log(response.data);
           if (response.data.length === 0) {
             makeAlert('검색 실패', '검색 조건에 맞는 약품이 없습니다', () =>
               navigation.push('SearchDrug', {find: true}),
@@ -71,7 +66,6 @@ const SearchResult = ({navigation, route}) => {
     } else {
       let {uri, text} = route.params;
       text = text || '';
-      console.log(uri, text);
       const localUri = uri;
       const filename = localUri.split('/').pop();
       const match = /\.(\w+)$/.exec(filename ?? '');
@@ -120,10 +114,44 @@ const SearchResult = ({navigation, route}) => {
         });
     }
   }, [navigation, route.params]);
-
-  console.log(route.params);
+  const render = item => {
+    const {drugName, drugId} = item;
+    const containerStyle = {width: 305, height: 120};
+    const imageStyle = {width: 100, height: 100};
+    if (typeof item === 'object') {
+      return (
+        <Drug
+          key={drugId}
+          name={drugName}
+          drugId={drugId}
+          info={item}
+          containerStyle={containerStyle}
+          imageStyle={imageStyle}
+          onPress={() =>
+            navigation.push('DrugDetail', {
+              image: icons.pill,
+              item,
+            })
+          }
+        />
+      );
+    } else {
+      return (
+        <Drug
+          key={drugId}
+          name={'의약품을 확인하세요'}
+          containerStyle={containerStyle}
+          imageStyle={imageStyle}
+          onPress={() => {
+            setIsOpen(true);
+            setUrl(item);
+          }}
+        />
+      );
+    }
+  };
   return (
-    <ScrollView>
+    <>
       <View style={styles.container}>
         <Modal
           visible={isOpen}
@@ -168,45 +196,28 @@ const SearchResult = ({navigation, route}) => {
               </Text>
             )}
             {result.length > 0 ? (
-              <ScrollView style={styles.scrollView}>
-                {result.map((elem, idx) => {
-                  console.log(elem);
-                  const {drugName, drugId} = elem;
-                  const containerStyle = {width: 305, height: 120};
-                  const imageStyle = {width: 100, height: 100};
-                  if (typeof elem === 'object') {
-                    return (
-                      <Drug
-                        key={idx}
-                        name={drugName}
-                        drugId={drugId}
-                        info={elem}
-                        containerStyle={containerStyle}
-                        imageStyle={imageStyle}
-                        onPress={() =>
-                          navigation.push('DrugDetail', {
-                            image: icons.pill,
-                            elem,
-                          })
-                        }
-                      />
-                    );
-                  } else {
-                    return (
-                      <Drug
-                        key={idx}
-                        name={'의약품을 확인하세요'}
-                        containerStyle={containerStyle}
-                        imageStyle={imageStyle}
-                        onPress={() => {
-                          setIsOpen(true);
-                          setUrl(elem);
-                        }}
-                      />
-                    );
+              <FlatList
+                style={styles.scrollView}
+                data={part}
+                keyExtractor={elem => elem.drugId}
+                renderItem={({item}) => render(item)}
+                onEndReached={() => {
+                  if (part.length >= result.length) {
+                    return;
                   }
-                })}
-              </ScrollView>
+                  console.log(part.length, result.length);
+                  setPart([
+                    ...part,
+                    ...result.slice(part.length, part.length + 4),
+                  ]);
+                }}
+                onEndReachedThreshold={0}
+                ListFooterComponent={
+                  part.length < result.length && (
+                    <ActivityIndicator size="small" color={colors.darkGray} />
+                  )
+                }
+              />
             ) : (
               <View style={styles.indicator}>
                 <ActivityIndicator size="large" color={colors.darkGray} />
@@ -216,7 +227,7 @@ const SearchResult = ({navigation, route}) => {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </>
   );
 };
 
